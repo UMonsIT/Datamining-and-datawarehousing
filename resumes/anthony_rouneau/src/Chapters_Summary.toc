@@ -1,0 +1,81 @@
+\contentsline {part}{I\hspace {1em}Classification}{3}
+\contentsline {paragraph}{$\bullet \ $Buts d'une classification}{3}
+\contentsline {section}{\numberline {1}Approche g\IeC {\'e}n\IeC {\'e}rale}{3}
+\contentsline {section}{\numberline {2}Arbre de d\IeC {\'e}cision (DTI)}{4}
+\contentsline {subsection}{\numberline {2.1}Algorithme de Hunt}{4}
+\contentsline {subsection}{\numberline {2.2}Choisir la condition de test}{5}
+\contentsline {paragraph}{Attributs binaire}{5}
+\contentsline {paragraph}{Attributs nominaux}{5}
+\contentsline {paragraph}{Attributs ordonn\IeC {\'e}s}{5}
+\contentsline {paragraph}{Attributs continus}{5}
+\contentsline {subsection}{\numberline {2.3}Qualit\IeC {\'e} d'un partitionnement}{6}
+\contentsline {paragraph}{$\bullet \ $Impuret\IeC {\'e} d'un noeud}{6}
+\contentsline {paragraph}{$\bullet \ $Impuret\IeC {\'e} d'un split}{6}
+\contentsline {paragraph}{$\bullet \ $Gain}{8}
+\contentsline {paragraph}{$\bullet \ $Ratio de gain}{9}
+\contentsline {subsection}{\numberline {2.4}Algorithme}{9}
+\contentsline {subsection}{\numberline {2.5}Caract\IeC {\'e}ristiques}{10}
+\contentsline {section}{\numberline {3}Overfitting}{11}
+\contentsline {subsection}{\numberline {3.1}Bruit}{11}
+\contentsline {subsection}{\numberline {3.2}Manque de repr\IeC {\'e}sentativit\IeC {\'e}}{12}
+\contentsline {subsection}{\numberline {3.3}Proc\IeC {\'e}dure de comparaison multiple}{12}
+\contentsline {subsection}{\numberline {3.4}Estimation des erreurs de g\IeC {\'e}n\IeC {\'e}ralisation}{12}
+\contentsline {subsubsection}{\numberline {3.4.1}Estimation par resubstitution}{12}
+\contentsline {subsubsection}{\numberline {3.4.2}Incorporation de la complexit\IeC {\'e} du mod\IeC {\`e}le}{13}
+\contentsline {paragraph}{$\bullet \ $Estimation pessimiste de l'erreur}{13}
+\contentsline {paragraph}{$\bullet \ $Description de longueur minimal (\texthl {MDL})}{14}
+\contentsline {subsubsection}{\numberline {3.4.3}Estimer les bornes statistiques}{15}
+\contentsline {subsubsection}{\numberline {3.4.4}Utiliser des donn\IeC {\'e}es de validation}{15}
+\contentsline {subsection}{\numberline {3.5}Overfitting des arbres de d\IeC {\'e}cision}{15}
+\contentsline {paragraph}{$\bullet \ $Prepruning (Early Sotpping Rule)}{15}
+\contentsline {paragraph}{$\bullet \ $Post-pruning}{15}
+\contentsline {subsection}{\numberline {3.6}\'Evaluer les performances d'un classificateur}{16}
+\contentsline {subsubsection}{\numberline {3.6.1}Les m\IeC {\'e}triques}{16}
+\contentsline {subsubsection}{\numberline {3.6.2}M\IeC {\'e}thode \textit {Holdout}}{18}
+\contentsline {subsubsection}{\numberline {3.6.3}Random subsampling}{18}
+\contentsline {subsubsection}{\numberline {3.6.4}Cross-validation}{18}
+\contentsline {subparagraph}{k-fold}{18}
+\contentsline {subparagraph}{leave-one-out}{18}
+\contentsline {subsubsection}{\numberline {3.6.5}Bootstrap}{18}
+\contentsline {subsection}{\numberline {3.7}M\IeC {\'e}thode de comparaison de classificateurs}{19}
+\contentsline {section}{\numberline {4}Types d'algorithmes}{22}
+\contentsline {subsection}{\numberline {4.1}Nearest Neighbours (IBk, Lazy)}{22}
+\contentsline {subsection}{\numberline {4.2}R\IeC {\`e}gles de classification}{22}
+\contentsline {subsection}{\numberline {4.3}Arbres IBk}{24}
+\contentsline {subsection}{\numberline {4.4}Naive Bayes}{24}
+\contentsline {part}{II\hspace {1em}Analyse par association}{25}
+\contentsline {paragraph}{$\bullet \ $Domaines d'application}{25}
+\contentsline {paragraph}{$\bullet \ $D\IeC {\'e}finition du probl\IeC {\`e}me}{25}
+\contentsline {subparagraph}{Repr\IeC {\'e}sentation binaire}{25}
+\contentsline {subparagraph}{\textit {Itemsets}}{25}
+\contentsline {subparagraph}{\textit {Support Count}}{25}
+\contentsline {subparagraph}{R\IeC {\`e}gles d'association}{26}
+\contentsline {section}{\numberline {5}D\IeC {\'e}couverte de r\IeC {\`e}gles}{26}
+\contentsline {section}{\numberline {6}G\IeC {\'e}n\IeC {\'e}ration de \textit {frequent itemsets}}{27}
+\contentsline {subsection}{\numberline {6.1}Le principe \textit {Apriori}}{27}
+\contentsline {subsection}{\numberline {6.2}G\IeC {\'e}n\IeC {\'e}ration d'itemsets fr\IeC {\'e}quents avec \textit {Apriori}}{28}
+\contentsline {subsection}{\numberline {6.3}G\IeC {\'e}n\IeC {\'e}ration de candidats et \IeC {\'e}lagage}{29}
+\contentsline {subsubsection}{\numberline {6.3.1}Force brute}{29}
+\contentsline {subsubsection}{\numberline {6.3.2}$\mathbf {F_{k-1} \times F_1}$}{29}
+\contentsline {subsubsection}{\numberline {6.3.3}\texthl {$\mathbf {F_{k-1} \times F_{k-1}}$}}{30}
+\contentsline {subsection}{\numberline {6.4}Compter le \textit {support count}}{30}
+\contentsline {section}{\numberline {7}G\IeC {\'e}n\IeC {\'e}ration de r\IeC {\`e}gles d'associations}{33}
+\contentsline {subsection}{\numberline {7.1}\'Elagage bas\IeC {\'e} sur la \textit {confidence}}{33}
+\contentsline {subsection}{\numberline {7.2}G\IeC {\'e}n\IeC {\'e}ration de r\IeC {\`e}gle dans l'algorithme Apriori}{33}
+\contentsline {section}{\numberline {8}Repr\IeC {\'e}sentations compactes des itemsets fr\IeC {\'e}quents}{35}
+\contentsline {subsection}{\numberline {8.1}Maximal Frequent Itemset}{35}
+\contentsline {subsection}{\numberline {8.2}Closed Frequent Itemsets}{36}
+\contentsline {section}{\numberline {9}Optimiser Apriori}{38}
+\contentsline {subsection}{\numberline {9.1}Traverser un treillis}{38}
+\contentsline {subsubsection}{\numberline {9.1.1}\texthl {General-To-Specific}}{38}
+\contentsline {subsubsection}{\numberline {9.1.2}\texthl {Specific-To-General}}{38}
+\contentsline {subsubsection}{\numberline {9.1.3}Bidirectionnel}{39}
+\contentsline {subsubsection}{\numberline {9.1.4}Classes d'\IeC {\'e}quivalence}{39}
+\contentsline {subsubsection}{\numberline {9.1.5}Profondeur / Largeur}{40}
+\contentsline {subsection}{\numberline {9.2}Repr\IeC {\'e}sentation des transactions}{41}
+\contentsline {section}{\numberline {10}Algorithme FP-Growth}{43}
+\contentsline {subsection}{\numberline {10.1}FP-Tree}{43}
+\contentsline {subsection}{\numberline {10.2}G\IeC {\'e}n\IeC {\'e}ration d'itemsets fr\IeC {\'e}quents}{43}
+\contentsline {subparagraph}{D\IeC {\'e}composition en sous-probl\IeC {\`e}me}{43}
+\contentsline {subparagraph}{Division en FP-Tree conditionnel}{44}
+\contentsline {part}{III\hspace {1em}Analyse par clustering}{45}

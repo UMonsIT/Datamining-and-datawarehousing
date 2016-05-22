@@ -182,41 +182,39 @@
 %
 %
 \part{Classification}
-	\section{Introduction}
-		\alinea Le but d'une classification est d'assigner des objets
-			(instances) à
-			une classe selon une suite d'attributs. Chaque objet peut donc
-			être représenté par un tuple $(x, y)$, où $x$ est une séquence
-			d'attributs et $y$ le nom de sa classe.\\
-		%
-		\alinea Un \myul{\textbf{attribut}} peut être discret ou continu,
-			contrairement au \myul{\textbf{label de classe}}, 
-			qui lui doit être discret. Ce qui
-			veut dire que le nombre de classes dans lesquelles les instances
-			seront classé est fini, et que toutes les classes sont à priori
-			connues. \hl{C'est ce qui différencie une classification d'une 
-			régression}\\
-		%
-		~\\
-		%
-		\myul{\textbf{Classification}}-- \red{Tâche de construire/%
-			d'apprendre une fonction $f$ qui fera correspondre un ensemble
-			d'attributs, un objet, $x$ à une des classes prédéfinies, $y$.}
-		%
-		\paragraph{\point Buts d'une classification}~\\~\\
-		%
-		\begin{tabular}{lp{11cm}}
-		    \myul{\textbf{Modélisation descriptive}}& 
-		    	\red{Utilisation d'une classification dans le but de lister les
-				attributs qui définissent une certaine classe.}
-				(e.g. attributs d'animaux $\rightarrow$ famille d'animaux.\\
-		    \myul{\textbf{Modélisation prédictive}}&
-				\red{Utilisation d'une classification pour prédire la classe
-				d'objets inconnus.} Notons qu'une classification n'est pas
-				performante pour des classes ordonnées (avec une hiérarchie
-				ou un ordre définie).
-		\end{tabular}				
-		%
+	\alinea Le rôle d'une classification est d'assigner des objets
+		(instances) à
+		une classe selon une suite d'attributs. Chaque objet peut donc
+		être représenté par un tuple $(x, y)$, où $x$ est une séquence
+		d'attributs et $y$ le nom de sa classe.\\
+	%
+	\alinea Un \myul{\textbf{attribut}} peut être discret ou continu,
+		contrairement au \myul{\textbf{label de classe}}, 
+		qui lui doit être discret. Ce qui
+		veut dire que le nombre de classes dans lesquelles les instances
+		seront classé est fini, et que toutes les classes sont à priori
+		connues. \hl{C'est ce qui différencie une classification d'une 
+		régression}\\
+	%
+	~\\
+	%
+	\myul{\textbf{Classification}}-- \red{Tâche de construire/%
+		d'apprendre une fonction $f$ qui fera correspondre un ensemble
+		d'attributs, un objet, $x$ à une des classes prédéfinies, $y$.}
+	%
+	\paragraph{\point Buts d'une classification}~\\~\\
+	%
+	\begin{tabular}{lp{11cm}}
+	    \myul{\textbf{Modélisation descriptive}}& 
+	    	\red{Utilisation d'une classification dans le but de lister les
+			attributs qui définissent une certaine classe.}
+			(e.g. attributs d'animaux $\rightarrow$ famille d'animaux.\\
+	    \myul{\textbf{Modélisation prédictive}}&
+			\red{Utilisation d'une classification pour prédire la classe
+			d'objets inconnus.} Notons qu'une classification n'est pas
+			performante pour des classes ordonnées (avec une hiérarchie
+			ou un ordre définie).
+	\end{tabular}				
 	%
 	\section{Approche générale}
 		\alinea Une technique de classification consiste à construire un
@@ -1236,7 +1234,7 @@
 			%
 			\begin{figure}[H]
 				\centering
-				\includegraphics[scale=1.0]{Images/prism.png}
+				\includegraphics[scale=0.4]{Images/prism.png}
 				\caption{Règle et précision de classification pour la classe
 						 "non"}
 				\label{fig:prism}
@@ -1251,7 +1249,7 @@
 			%
 			\begin{figure}[H]
 				\centering
-				\includegraphics[scale=1.0]{Images/prism2.png}
+				\includegraphics[scale=0.4]{Images/prism2.png}
 				\caption{On peut encore raffiner la condition en
 						 rajouter des conditions}
 				\label{fig:prism2}
@@ -1263,7 +1261,7 @@
 			%
 			\begin{figure}[H]
 				\centering
-				\includegraphics[scale=1.0]{Images/prism3.png}
+				\includegraphics[scale=0.5]{Images/prism3.png}
 				\caption{L'égalité entre deux règles se brise par le
 						 le nombre d'instances couvertes}
 				\label{fig:prism3}
@@ -1348,6 +1346,808 @@
 	%
 %
 \part{Analyse par association}
+	\alinea Le but de ce chapitre est de développer des techniques
+		permettant de déduire des liens entre des entrées de jeu 
+		de données. Un exemple répandu est celui du panier d'achat 
+		d'un client de magasin, on pourrait trouver des liens entre
+		l'achat de certaines marchandises avec l'achat d'autres. On 
+		appel ces liens des \textbf{règles d'association}. Exemple :
+		$$\{Langes\} \longrightarrow \{Bieres\}$$
+		Ce qui impliquerait qu'il y a une forte corrélation entre
+		la vente de langes et la vente de bières, ce qui veut dire
+		que les gens qui achètent des langes ont de grandes chance d'acheter
+		de la bière en même temps.
+	%
+	\paragraph{\point Domaines d'application}~\\~\\
+		\alinea \hl{En plus de ces paniers de marchandises, on trouve l'utilité
+			dans la bio-informatique, les diagnostiques médicaux, 
+			le Web mining et l'analyse de données scientifiques. Par exemple,
+			en géologie, des modèles d'associations peuvent révéler 
+			d'intéressantes relations entre les océan, les continents, et 
+			les processus atmosphériques.}
+		%
+	%
+	\paragraph{\point Définition du problème}~\\~\\
+		\alinea Nous allons définir ci dessous les différents
+			termes et hypothèses que nous utiliserons.
+		%
+		\subparagraph{Représentation binaire} Les jeux de données
+			traitées seront supposé représentable de manière binaire.
+			Dans l'exemple du panier d'achat, on aura une variable par
+			type de produit, cette variable vaudra 1 si l'objet a été acheté,
+			et 0 sinon. \hl{Nous pouvons noter que dans ce cas, la variable
+			est asymétrique de par le fait que si la variable est à 0,
+			elle ne sera pas utilisée, en effet, il n'est pas très utile 
+			de savoir que nous n'avons pas acheté un certain objet ...}.
+		%
+		\subparagraph{\textit{Itemsets}} Soit
+			$I = \{i_1, i_2, \ldots, i_d\}$ être l'ensemble de tous 
+			les objets (\textit{itemset}) considérés et 
+			$T = \{t_1, t_2, \ldots, t_N\}$ être l'ensemble des transactions
+			effectuées. Chaque transaction de $t_i$ est un sous-ensemble
+			de $I$. Si un \textit{itemset} comporte $k$ objets, il est 
+			appelé \textit{$k$-itemset}. L'\textit{itemset} vide est accepté.
+		%
+		\subparagraph{\textit{Support Count}} Soir la largeur de la 
+			transaction (\textit{transaction width}) étant le nombre
+			d'objets présent dans la transaction. Le \textit{support count}
+			($\sigma(X)$) est défini comme suit : 
+			$$ \sigma(X) = |\left\lbrace t_i | X \subseteq t_i,\ \ t_i \in T
+				\right\rbrace| $$
+			On a donc le nombre de transactions dans $T$ dans lesquels
+			apparaît l'ensemble $X$ d'objets.
+		%	
+		\subparagraph{Règles d'association} Implication écrite sous la forme
+			$X \longrightarrow Y$ dans laquelle $X$ et $Y$ sont disjoints
+			($X \cap Y = \emptyset$). La solidité d'une règle est
+			mesurée en terme de son \textit{Support} et de sa
+			\textit{Confidence}. Soit $N$ le nombre total de transaction
+			($ = |T|$), on a 
+			\begin{align*}
+				\text{Support},\ \ s(X \longrightarrow Y) &= 
+							\frac{\sigma(X \cup Y)}{N}\\
+				\text{Confidence},\ \ c(X \longrightarrow Y) &= 
+							\frac{\sigma(X \cup Y)}{\sigma(X)}
+			\end{align*}
+			On peut noter qu'une règle ayant un faible \textit{Support}
+				peut être dû à la chance, et que la \textit{Confidence}
+				défini la confiance que l'on peut avoir dans la règle.
+			\hl{La \textit{Confidence} donne aussi une estimation
+			de $\text{Pr}(Y | X)$}. De plus, \hl{le \textit{support} d'une
+			règle $X \longrightarrow Y$ ne dépend que de l'ensemble
+			$X \cup Y$}. Donc, les six règles suivantes ont le
+			même \textit{support} :
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.725]{Images/support}
+			\end{figure}\noindent
+			%
+			\hl{Il faut noter que l'inférence faite par une règle 
+			d'association ne donne pas de causalité}.
+			L'achat des langes n'est pas la cause de l'achat de bières.
+		%
+	%
+	\section{Découverte de règles}
+		%
+		\begin{tabular}{lp{10.25cm}}
+			\myul{\textbf{Découverte de règles d'association}} & 
+			\red{\'Etant donné un ensemble de transaction $T$, trouver toutes
+			les règles règles ayant un \textit{support} $ \geq minsup$ et
+			une \textit{confidence} $ \geq minconf $, où $minsup$ et 
+			$minconf$ sont deux seuils à définir.}
+		\end{tabular}\noindent~\\\noindent~\\\noindent%
+		%
+		\alinea Un ensemble de transaction
+			qui contient $d$ objets peut générer $R$ règles au total.
+		%
+		$$ R = 3^d - 2^{d+1} + 1 $$
+		%		
+		\alinea \myul{\hl{On peut le prouver}} de la manière suivante. 
+			Soit le tableau $\left[L, R, L, X, X, ..., X\right]$ 
+			représentant une règle. Les indices du tableau sont les 
+			différents objets, $L$ veut dire "l'objet se trouve dans
+			la partie gauche de la règle", $R$ veut dire "l'objet se trouve
+			dans la partie droite de la règle"
+			et $X$ veut dire "ne fait pas partie de la règle". Le tableau
+			donné donnerait donc la règle $\{obj_0, obj_2\} \longrightarrow
+			\{obj_1\}$.\\
+		%
+		\alinea On a donc 3 possibilités par case, donc $3^d$. Mais on ne
+			peut pas avoir que des $X$ et des $R$, 
+			ni que des $X$ et des $L$, on doit donc retirer des $3^d$ 
+			possibilité 2 fois $2^d$ ($X$ et $L$ ou $X$ et $R$ = 2 
+			possibilités par case), et $2\cdot 2^d = 2^{d+1}$. Et enfin,
+			on se rend compte que dans ce qu'on a retiré, il y avait
+			deux fois l'ensemble de contenant que des $X$, on doit 
+			donc rajouter $1$ pour compenser. On a donc bien 
+			$3^d - 2^{d+1} + 1$.\\
+		%
+		\newpage\noindent
+		%
+		\alinea On peut conclure qu'il est impossible de toutes les générer
+			par force brute, il faut donc trouver des astuces pour générer
+			de bonnes règles en un temps raisonnable. On a donc deux tâches
+			principales à remplir :\\~\\
+			\begin{tabular}{lp{10cm}}
+				(1) \myul{\textbf{Génération de \textit{Frequent
+					Itemsets}}} &
+					\red{Trouver tous les itemsets dont le \textit{support}
+					satisfait $minsup$.}\\
+				(2) \myul{\textbf{Génération de règle}} &
+					\red{Extraire les 
+					règles à haute \textit{confidence}, qui seront 
+					appelées les règles "fortes".} Généralement moins 
+					couteux que (1).
+			\end{tabular}
+		%
+	%
+	\section{Génération de \textit{frequent itemsets}}
+		\alinea \hl{Un ensemble de $k$ objets peut potentiellement générer
+			$2^k - 1$ itemsets fréquents}, étant donné que dans un
+			itemset candidat, un objet peut soit être présent, soit ne
+			pas l'être. Un algorithme de force brute devrait donc effectuer
+			$O((2^k - 1)Nw)$ opérations pour calculer les \textit{support} de 
+			tous les itemsets possibles, car il faut comparer les itemsets
+			possibles avec les $N$ transaction qui ont une largeur de 
+			maximum $w$. Il y a deux manières de réduire le nombre de 
+			calculs.
+		%
+		\begin{enumerate}
+			\setlength{\itemsep}{0pt}
+			\setlength{\parskip}{0pt}
+			\setlength{\parsep}{0pt}
+			\item \hl{Réduire le nombre d'itemset à comparer} (cf. la section
+				\ref{sec:rules:apriori}).
+			\item \hl{Réduire le nombre de comparaisons en utilisant des
+				structures de données avancées.}
+		\end{enumerate}
+		%
+		\subsection{Le principe \textit{Apriori}}\label{sec:rules:apriori}
+			\alinea Ce principe permet de réduire le nombre d'itemsets à
+				comparer aux transactions. Ce principe dit qu'un itemset
+				fréquent ne contient que des sous-ensembles fréquents.
+				Et donc, ce qui nous intéresse, que\hl{ si un itemset est 
+				non-fréquent, tous ses super-ensembles sont non-fréquents}.\\
+			%
+			~\\
+			%
+			\alinea Ceci est rendu possible grâce à l'anti-monotonicité
+				de la mesure \textit{support}.\\~\\
+			%
+			\begin{tabular}{lp{10cm}}
+				\myul{\textbf{Propriété de Monotonicité}} &
+					\red{Soit $I$ un ensemble d'objets, et $J = 2^I$ l'ensemble 
+					des parties de I. Une mesure $f$ est monotone
+					(ou bornée supérieurement) si:
+					$$ \forall X, Y \in J : (X \subseteq Y) 
+							\longrightarrow f(X) \leq f(Y) $$}		
+			\end{tabular}~\\~\\
+			Par analogie, une propriété $f$ est non-monotone si:
+				$$ \forall X, Y \in J : (X \subseteq Y) 
+							\longrightarrow f(X) \geq f(Y) $$
+			%
+			Le principe \textit{Apriori} peut être appliqué à n'importe 
+			quelle mesure non-monotone incorporée à l'algorithme.
+		%
+		\subsection{Génération d'itemsets fréquents avec \textit{Apriori}}
+			\alinea La figure \ref{fig:apriori:gen} illustre la génération
+				d'éléments.
+			%
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.75]{Images/apriori_gen.png}
+				\caption{}
+				\label{fig:apriori:gen}
+			\end{figure}\noindent
+			%
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.75]{Images/apriori_algo.png}
+				\caption{L'algorithme permettant d'extraire les itemsets
+						 fréquents}
+				\label{fig:apriori:algo}
+			\end{figure}\noindent
+			%
+			L'implémentation de la fonction \texttt{apriori-gen} est
+				couvert dans la partie \ref{sec:apriori:gen} et la 
+				fonction \texttt{subset} est expliquée dans la section
+				\ref{sec:apriori:count}. L'algorithme prend $k_{max} +1$
+				itération, où $k_{max}$ est la taille du plus grand
+				itemset fréquent.
+			%
+		%
+		\subsection{Génération de candidats et élagage}\label{sec:apriori:gen}
+			\alinea La fonction \texttt{apriori-gen} de l'algorithme Apriori
+				génère des candidats suivants deux opérations:\\~\\
+				\begin{tabular}{lp{12cm}}
+					(1) \myul{\textbf{\hl{Génération de candidat}}} & 
+						\red{Génère des candidats de taille $k$ à partir 
+							des itemsets de taille $k-1$ déjà générés.}\\
+					(2) \myul{\textbf{\hl{\'Elagage des candidats}}} & 
+						\red{Supprime les candidats n'ayant pas assez de
+						\textit{support}.}
+				\end{tabular}~\\~\\
+			%
+			\alinea L'étape (2) doit en fait regarder tous les itemsets de
+				taille $k$ générés n (1), et supprimer ceux qui contiennent
+				des sous-itemsets (pas besoin de regarder ceux de taille 1)
+				non-fréquents, par le principe d'\textit{Apriori}. C\hl{eci
+				représente $O(k)$ opérations pour chaque itemset de
+				taille $k$}, cependant, ce nombre sera réduit plus tard.\\
+			%
+			~\\
+			%
+			\alinea Une bonne méthode pour générer des itemsets candidats doit
+				suivre les directives suivantes:
+				\begin{enumerate}
+					\setlength{\itemsep}{0pt}
+					\setlength{\parskip}{0pt}
+					\setlength{\parsep}{0pt}
+					\item[(a)] \hl{Elle devrait éviter de générer trop de 
+						candidats inutiles (avec sous-ensemble non-fréquent).}
+					\item[(b)] \hl{Elle doit être certaine de ne pas retirer
+						de candidats valides}
+					\item[(c)] \hl{Elle ne devrait pas générer plus d'une fois
+						le même candidat.} En effet, il est possible de
+						créer $\{a,b,c\}$ en fusionnant $\{a, b\}$ et $\{c\}$
+						mais aussi en fusionnant $\{a, c\}$ et $\{b\}$, il
+						faut donc éviter les doublons.
+				\end{enumerate}
+			%
+			\subsubsection{Force brute}
+				\alinea Le principe est de considérer tous les itemsets
+					de taille $k$ comme candidat potentiel. On a donc
+					$\binom{d}{k}$ itemsets générés à chaque étape,
+					et vu que $O(k)$ opérations doivent être effectuées par
+					itemset, il y a $O(d\cdot 2^{d-1})$ opérations.
+				%
+			%
+			\subsubsection{$\mathbf{F_{k-1} \times F_1}$}
+				\alinea une autre méthode de génération est de 
+					créer des itemsets de taille $k$ en prenant 
+					les itemsets de taille $k-1$ et d'y rajouter 
+					un par un les objets fréquents (itemset de taille 1).\\
+				%				
+				\alinea La méthode respecte (b), mais pas (c). Une manière de 
+					respecter (c) serait de \hl{s'assurer de respecter l'ordre
+					lexicographique} lors de la création de nouveaux 
+					itemsets. \\
+				%
+				\textbf{Exemple} : $\{a, b\}$ peut être 
+					augmenté
+					avec $\{c\}$ pour former  $\{a,b,c\}$, mais pas 
+					$\{a, c\}$ et $\{b\}$ car $b$ vient se rajouter
+					après $c$, qui est plus grand d'un point de vue
+					lexicographique.\\
+				%
+				\alinea La méthode génère cependant pas mal d'itemsets
+					inutiles. En effet, admettons que l'on sache que 
+					$\{a,c\}$ est non-fréquent, la méthode va tout
+					de même créer $\{a,b,c\}$ en fusionnant $\{a,b\}$
+					et $\{c\}$.
+				%
+			%
+			\newpage
+			%
+			\subsubsection{\hl{$\mathbf{F_{k-1} \times F_{k-1}}$}}
+				\alinea \hl{C'est la méthode utilisée en pratique}, 
+					elle consiste à fusionner deux itemsets de taille
+					$k-1$ qui ont chacun $k-2$ éléments en commun, tout
+					en \hl{gardant l'ordre lexicographique discuté au point
+					précédent}.\\
+				\textbf{Exemple :} on fusionnerait $\{a,b,c\}$ avec
+					$\{a,b,d\}$ pour obtenir $\{a,b,c,d\}$ car ils ont $a$ et
+					$b$ en commun. \hl{Mais pour ce faire, il faut bien
+					vérifier que le sous-ensemble commun de taille $k-2$ 
+					est fréquent.}
+				%
+			%
+		%
+		\subsection{Compter le \textit{support count}}\label{sec:apriori:count}
+			\alinea Le principe de cette étape est de compter dans combien de
+				transaction se retrouve un itemset candidat. Les étapes
+				d'avant vont générer un ensemble itemsets de taille fixe $k$.
+				\hl{On va donc préférer énumérer tous les sous-ensemble 
+				de taille
+				$k$ contenu dans chaque transaction et incrémenter les
+				itemsets s'y retrouvant}. Ce faisant, on ne va
+				parcourir qu'une seul fois toutes les transactions.
+				La figure \ref{fig:support:count} illustre la technique 
+				utilisée.
+			%
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.75]{Images/support_count}
+				\caption{Chaque noeud du niveau $j$ va se fixer un préfixe
+						 qui lui est propre de taille $j$}
+				\label{fig:support:count}
+			\end{figure}\noindent
+			%
+			Il reste alors à retrouver les itemsets candidats à incrémenter.
+			Une méthode pour faire ça est de \hl{"pousser"} les sous-ensemble
+			générés par l'énumération (e.g. ensembles de taille 3 de la 
+			figure \ref{fig:support:count}) \hl{dans un arbre de hachage}
+			Dans lequel les candidats sont divisés selon une table de hachage..
+			Ceci est illustré sur la figure \ref{fig:support:tree}.
+			%		
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.7]{Images/support_tree}
+				\includegraphics[scale=0.7]{Images/support_tree2}
+				\caption{Dés lors, pas besoin de comparer tous les candidats,}
+						 mais juste ceux présents dans la partie de l'arbre\\
+						 où le sous-ensemble a été "poussé"
+				\label{fig:support:tree}
+			\end{figure}\noindent
+			%
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.75]{Images/freq_it_a}
+				\includegraphics[scale=0.75]{Images/freq_it_b}
+				\caption{Si la largeur moyenne d'une transaction}
+						 est de 10, \hl{les itemsets fréquents de taille}\\
+						 \hl{bien plus grande que 10 sont peu probables}
+				\label{fig:freq_it:a}
+			\end{figure}\noindent
+			%
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.75]{Images/support_treshold}
+				\caption{\hl{Important}}
+				\label{fig:support_threshold}
+			\end{figure}\noindent
+			%
+		% La section sur la complexité est passée car le prof a insisté
+		% sur le fait ques c'était pas important...
+	%
+	\newpage
+	%
+	\section{Génération de règles d'associations}
+		\alinea Cette partie est moins importante à optimiser car \hl{on
+			a plus besoin d'accéder à la base de donnée}, ce qui prenait
+			du temps. En effet, on connaît, les itemsets fréquents, grâce 
+			à l'étape précédente, et pour calculer la \textit{confidence},
+			on a juste besoin du support count des règles, ce qui est 
+			déjà calculé.\\
+		%
+		~\\
+		%
+		\alinea Chaque itemset candidat $Y$ peut générer $2^k - 2$ 
+			règle. \myul{\textbf{\hl{On peut le prouver}}}. En effet,
+			Chaque objets d'$Y$ doit se retrouver dans la règle, chaque
+			objet peut donc être soit à gauche, soit à droite de la règle.
+			on a donc $2^k$ possibilités de combinaisons, mais on ne 
+			doit pas considérer les règle $\{\} 
+			\longrightarrow Y$ et $Y \longrightarrow \{\}$, on doit
+			donc en retirer 2.\\
+		%
+		\alinea On peut donc générer des règles avec $Y$ en découpant 
+			$Y$ en deux sous-ensembles : $X$ et $Y\setminus X$ afin de
+			créer la règle $X \longrightarrow Y \setminus X$.
+		%
+		\subsection{\'Elagage basé sur la \textit{confidence}}
+			\alinea On ne peut plus se baser sur le principe 	
+				d'\textit{Apriori}, car la mesure de \textit{confidence} 
+				n'est pas anti-monotone. Néanmoins, en comparant les règles 
+				générées par le même itemset fréquent $Y$, \hl{le théorème
+				suivant	s'applique}:
+				\begin{align*}
+				   &\text{\textbf{Si}}\ &\text{une règle } X\longrightarrow Y
+				   			\setminus X 
+					\text{ ne satisfait pas le seuil } minconf, \\
+					&\text{\textbf{Alors}},\ &\forall X' \subseteq X, 
+					  X' \longrightarrow Y \setminus X' \text{ ne 
+					  satisfait pas non plus le seuil } minconf
+				\end{align*}
+			%
+		%
+		\subsection{Génération de règle dans l'algorithme Apriori}
+			\alinea L'idée est de fusionner les parties droites de
+				règles avec une \textit{confidence} élevée pour en former
+				des nouvelles, qui seront elles-mêmes de confiance de par
+				le théorème précédent.
+			%		
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.75]{Images/conf_algo1}
+				\caption{Génération de règles à partir de tous}
+				les itemsets fréquents générés à l'étape précédente.
+				\label{fig:conf:algo1}
+			\end{figure}\noindent
+			%
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.75]{Images/conf_algo2}
+				\caption{Génération de règles de confiance à}
+				partir de règles de confiance plus petites.
+				\label{fig:conf:algo2}
+			\end{figure}\noindent
+			%
+		%
+	%
+	\newpage
+	%
+	\section{Représentations compactes des itemsets fréquents}
+		\alinea Le nombre de transaction en pratique peut être très élevé.
+			C'est pourquoi il est utile de rendre compact l'ensemble
+			des itemsets fréquents.
+		%
+		\subsection{Maximal Frequent Itemset}
+			\begin{tabular}{lp{10cm}}
+				\myul{\textbf{\hl{Maximal Frequent Itemset}}} & 
+					\red{Itemset fréquent pour lequel aucun de ses 
+					super-ensembles immédiat ne sont fréquents.}
+			\end{tabular}~\\
+			%
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.90]{Images/max_item_set.png}
+				\caption{}
+				\label{fig:max_it_set}
+			\end{figure}\noindent
+			%
+			\alinea On voit ici qu'on peut se limiter à donner les itemset
+				en gras sur la figure \ref{fig:max_it_set}, car en prenant
+				tous leurs sous-ensemble, on obtient tous les itemsets 
+				fréquents. La \myul{\textbf{\hl{limitation}}} de cette
+				représentation est qu'on
+				abandonne le support count des sous-ensembles, ce qui
+				est embêtant pour calculer la \textit{confidence} des
+				règles générées par ces premiers.
+			%
+		%
+		\subsection{Closed Frequent Itemsets}
+			\alinea Cette représentation propose un \hl{ensemble compact
+				sans abandonner le support count des itemset.}\\
+			%
+			\begin{tabular}{lp{14cm}}
+				\myul{\textbf{\hl{Closed Itemset}}} &
+					\red{Un itemset $X$ est fermé si aucun des super-ensembles
+						 immédiats de $X$ n'a exactement le même support 
+						 count que $X$.}
+			\end{tabular}~\\~\\
+			%
+			\alinea On peut donc noter que si $\{A\}$ est non-fermé,
+				alors, il existe un objet $C$ t.q. la règle 
+				$A \longrightarrow C$ a 
+				une confiance de 100\%. En effet, si $\{A\}$ n'est pas fermé, 
+				ça veut dire qu'il y a un autre objet ($C$) t.q. 
+				$A$ n'apparaît jamais sans $C$.\\
+			%
+			\alinea En effet, le fait d'avoir le
+				même support count pour un super-ensemble veut dire que
+				ce super-ensemble revient autant de fois dans les transactions
+				que l'ensemble. \\
+			%
+			\textbf{Exemple} : Si on a $\sigma(\{X, Y\}) = 9$ et qu'on
+				a $\sigma(\{X, Y, Z\}) = 9$, ça veut dire qu'à chaque
+				fois qu'on a $\{X, Y\}$ dans une transaction, $Z$ est
+				également présent. On peut donc déduire que la confiance
+				(\textit{confidence}) de la règle $\{X, Y\} \longrightarrow Z$
+				est de 100\%.\\~\\
+			%
+			\begin{tabular}{lp{12.15cm}}
+				\myul{\textbf{\hl{Closed Frequent Itemset}}} & 
+					\red{Un itemset est fermé et fréquent s'il est fermé
+					et que son support dépasse $minsup$.}
+			\end{tabular}~\\
+			%
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.85]{Images/closed_itemset.png}
+				\caption{}.
+				\label{fig:closed_itemset}
+			\end{figure}\noindent
+			%
+			\alinea Le support count des itemsets fréquents fermés 
+				est sauvegardé dans la représentation.\\
+			%
+			\alinea L\hl{e support count de n'importe quel itemset fréquent
+				non-fermé peut être obtenu en prenant le \textbf{max} 
+				des support count de ses super-sensembles direct}. 
+				L'\hl{algorithme} retrouvant le support count de tous les
+				itemsets fréquents \hl{démarre donc de la plus grande taille 
+				de d'itemsets fréquents}. En effet, l'algorithme a besoin
+				de connaitre le support count des super-ensembles avant
+				de passer aux sous-ensembles.\\
+			%
+			\textbf{Preuve} : si $\{a, b\}$ est ouvert, on sait qu'il y
+				a un de ces super-ensembles immédiats qui a exactement
+				le même support count que lui (par la définition de non-fermé). 
+				La question serait alors de savoir duquel il s'agit. Mais
+				on sait que le support count d'un super ensemble ne peut 
+				pas être plus grand que le support count de l'ensemble 
+				lui-même (anti-monotonicité). Donc, le max des support count
+				de ses super-ensembles immédiats sera son propre support count.
+				\\			
+			%
+			~\\
+			%
+			\alinea On peut noter que \hl{des règles peuvent être 
+				détectées comme
+				redondantes} grâce à cette notions d'itemsets fréquents fermés.
+				En effet, si $\{b\}$ n'est pas fermé, mais que $\{b, c\}$
+				l'est, la règle $\{b\} \longrightarrow X$ est redondante
+				car elle a le même \textit{support} et la même
+				\textit{confidence} que la règle $\{b, c\} \longrightarrow X$.
+				Ces règles redondantes ne sont donc pas générées.
+			%
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=1.0]{Images/sets}
+				\caption{Si un ensemble est maximal, il est forcément fermé}
+				car sinon, il aurait un ensemble maximal comme super-ensemble
+				(contradiciton).
+				\label{fig:sets}
+			\end{figure}\noindent
+			%
+		%
+	%
+	\newpage
+	%
+	\section{Optimiser Apriori}
+		\alinea \hl{Bien que déjà pas mal, l'algorithme Apriori fait beaucoup
+			d'accès à la base de données quand il compte les support count.}
+			De plus, lorsque les largeurs de transaction augmentent, le
+			temps de calcul augmente aussi de manière significative.
+			Nous allons donc voir quelles sont les \hl{améliorations} 
+			que nous pouvons apporté à l'ordre dans lequel les itemsets
+			sont parcourus \hl{lors de la sélection des itemsets fréquents}..
+		%
+		\subsection{Traverser un treillis}
+			\alinea Le treillis formé par les itemsets de l'ensemble des 
+				transactions peut être traversé afin d'y trouver les 
+				itemsets fréquents. Tout repose alors sur la technique
+				de recherche utilisée. Quelques unes de ces stratégies 
+				sont expliquées ci-dessous.
+			%
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.65]{Images/lattice_1.png}
+				\caption{}
+				\label{fig:lattice:1}
+			\end{figure}\noindent
+			%
+			\subsubsection{\hl{General-To-Specific}}
+				\alinea On démarre de petits itemsets 
+					(1 éléments, puis 2, ...) pour terminer dans les
+					grands itemsets.
+					Cette méthode est efficace lorsque les itemsets 
+					fréquents sont petits. Dés lors, la frontière
+					fréquents/non-fréquents se trouve en haut du treillis
+					(cf. figure \ref{fig:lattice:1}).
+				%
+			%
+			\subsubsection{\hl{Specific-To-General}}
+				\alinea \`A l'inverse de la recherche précédente, on 
+					démarre cette fois des grand itemsets pour terminer
+					dans les plus petits. Cette méthode est efficace 
+					lorsque les itemsets fréquents sont grands, et donc
+					généralement \hl{quand on a de grandes transactions.} 
+					Dés lors, la frontière
+					fréquents/non-fréquents se trouve en bas du treillis
+					(cf. figure \ref{fig:lattice:1}).
+				%
+			%
+			\subsubsection{Bidirectionnel}
+				\alinea On peut combiner les deux techniques précédentes,
+					mais ça demande plus d'espace mémoire pour l'exécuter.
+					Utile pour les transactions de tailles très variantes
+					(beaucoup de grandes transaction et beaucoup de petites).
+				%
+			%
+			\subsubsection{Classes d'équivalence}
+				\alinea Pour parcourir le treillis plus efficacement,
+					les objets peuvent y être regroupé par classes
+					d'équivalence, c'est-à-dire par une propriété que
+					tout le groupe a en commun, comme un \hl{préfixe} ou 
+					un \hl{suffixe}. \hl{On peut noter que l'algorithme 
+					\textit{Apriori} considérait les classes d'équivalence
+					de taille}. On y prenait donc d'abord tous les itemsets
+					de taille 1, puis on passait à ceux de taille 2, ...
+				%
+				\begin{figure}[H]
+					\centering
+					\includegraphics[scale=0.65]{Images/lattice_2.png}
+					\caption{}
+					\label{fig:lattice:2}
+				\end{figure}\noindent
+				%
+			%
+			\subsubsection{Profondeur / Largeur}
+				%
+				\begin{figure}[H]
+					\centering
+					\includegraphics[scale=0.65]{Images/lattice_3}
+					\caption{}
+					\label{fig:lattice:3}
+				\end{figure}\noindent
+				%
+				\alinea L'algorithme \textit{Apriori} traverse les 
+					itemsets en largeur, considérant les tailles
+					inférieurs et finissant dans les grandes tailles.\\
+				%
+				\alinea L'exploration en profondeur quand à elle est souvent
+					utilisée en pratique car elle permet un grand élagage. 
+					On peut élaguer de deux 
+					manières, nous prendrons comme exemple la figure 
+					\ref{fig:lattice:4}.
+				%
+				\begin{enumerate}
+					\setlength{\itemsep}{0pt}
+					\setlength{\parskip}{0pt}
+					\setlength{\parsep}{0pt}
+					\item \hl{Si un itemsets $X$ est trouvé fréquent, alors,
+						tous les sous-arbres ne contenant que des 
+						sous-ensembles de $X$ peuvent être ignorés pour 
+						la suite de l'exploration}. Cet élagage utilise
+						l'ordre lexicographique utilisé dans l'arbre.
+						C'est l'exemple avec $\{b, c, d, e\}$. Par contre
+						si $\{a, b, c\}$ est trouvé fréquent, on ne peut
+						pas élaguer le sous-arbre $\{a, c\}$ car celui-ci
+						contient des ensembles, comme $\{a, c, d, e\}$ 
+						par exemple, qui ne sont pas des sous-ensembles de
+						$\{a, b, c\}$.
+					\item Si le support de $\{a, b, c\}$ est le même 
+						que le support de $\{a, b\}$, on peut ignorer
+						les sous-arbres qui ont $abd$ et $abe$ comme
+						racine car \hl{on est certains qu'ils ne contiendront 
+						pas d'itemsets fréquents maximaux}.\\
+						\myul{\textbf{\hl{On peut le prouver}}}. En effet,
+						si $\{a, b, c\}$ et $\{a, b\}$ ont le même support 
+						count, ça veut dire que dans une transaction,
+						$\{a, b\}$ n'apparaît jamais sans $c$. On a dés lors
+						qu'$\{a, b, d\}$ a le même support que 
+						$\{a, b, c, d\}$ qui aura été exploré dans le 
+						sous-arbre de racine $\{a, b, c\}$ de par l'ordre 
+						lexicographique respecté.
+				\end{enumerate}
+				%
+				
+				%
+				\begin{figure}[H]
+					\centering
+					\includegraphics[scale=0.6]{Images/lattice_4}
+					\caption{}
+					\label{fig:lattice:4}
+				\end{figure}\noindent
+				%
+			%
+		%
+		\subsection{Représentation des transactions}
+			\alinea On peut aussi chercher à optimiser la structure de 
+				données contenant les transactions. On distingue deux
+				types principaux. Ils sont représentés sur la figure 
+				\ref{fig:transactions}. La structure de gauche est généralement
+				utilisée mais celle de droite a quelques avantages. En effet,
+				la \textbf{\hl{structure verticale}} stocke, pour chaque objet,
+				la liste des transactions dans lesquels l'objet est présent.
+				\hl{Cependant, la liste des ID de transactions est parfois
+				trop grandes que pour être stockée de cette manière.}
+			%
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.425]{Images/transactions}
+				\caption{}
+				\label{fig:transactions}
+			\end{figure}\noindent
+			%
+			\alinea En partant d'une telle structure, il est aisé de définir
+				des relations entre les objets et les itemsets dans lesquels
+				ils sont contenus.	\\
+			%
+			~\\
+			%
+			\begin{tabular}{lp{12cm}}
+				\textbf{\hl{cover($i$)}} &
+					\red{Soit un item $i$, $cover(i)$ = l'ensemble des
+						 transaction qui contiennent l'objet $i$.} Exemple,
+						 dans la figure \ref{fig:transactions}, $cover(e)$
+						 = $\{1, 3, 6\}$.\\
+				\textbf{\hl{conditional cover, cocov($[s]$)}} & 
+					\red{Soit un itemset $s$, et l'ensemble des objets $I$;
+						\begin{align*}						
+							cocov[s] = \{ (i, T) | 
+								&i \in I, \textbf{et}\\							
+								&i \text{ précède tous les él. de } s 
+									\text{ dans l'ordre lex.}, \textbf{et}\\
+								&T = cover(i \cup s) \}
+						\end{align*}}
+						Exemple, dans la figure \ref{fig:transactions}, \\
+						  & $cocov[c] =  \{ (a, \{4, 8, 9\}),
+								(b,\ \{2, 5, 8, 9\})\}$\\
+						  & $cocov[be] = \{ (a,\ \{1\})\}$
+			\end{tabular}~\\~\\~\\
+			%
+			On peut noter que pour $j \cup s$ un itemset, $j \in I$, alors
+			$\forall i \in I,\ i\prec j$, on a
+			$$ cocov[j \cup s](i) = cocov[s](j) \cap cocov[s](i) $$
+		%
+	%
+	\newpage
+	%
+	\section{Algorithme FP-Growth}
+		\alinea Cet algorithme utilise une structure de donnée un peu 
+			qui s'appelle le FP-Tree.
+		%
+		\subsection{FP-Tree}
+			\alinea Construire un FP-Tree comporte plusieurs étapes
+			\begin{enumerate}
+				\setlength{\itemsep}{0pt}
+				\setlength{\parskip}{0pt}
+				\setlength{\parsep}{0pt}
+				\item On compte tout d'abord les support count des itemsets
+					de taille 1, afin de \hl{trier les objets par ordre 
+					décroissant} de support et pour écarte les non-fréquents.
+				\item On passe ensuite une deuxième fois sur les transactions
+					pour construire les branches du FP-Tree, c'est ce qui est
+					montré sur la figure \ref{fig:fptree:1}. Cette étape
+					\hl{trie les transactions par préfixe commun, en
+					coupant dans l'ordre des objets de l'étape 1.}.
+			\end{enumerate}
+			%
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.625]{Images/fptree_1a.png}
+				\includegraphics[scale=0.625]{Images/fptree_1b.png}
+				\caption{}
+				\label{fig:fptree:1}
+			\end{figure}\noindent
+			%
+			On peut noter que l'ordre décroissant des objets de l'étape 1.
+			ne garanti pas une taille minimum de l'arbre. De plus,
+			dans le pire des cas, cette représentation prend plus de place
+			que le dataset non compressé (pointeurs, compteurs, ...), mais
+			en général, il le compresse tout de même.
+			%
+		%
+		\subsection{Génération d'itemsets fréquents}
+			\alinea\hl{ L'avantage de cette algorithme est de pouvoir déduire
+				les itemsets fréquents directement depuis la structure
+				de donnée.}
+			%
+			\subparagraph{Décomposition en sous-problème} On commence
+				par explorer le FP-Tree de manière "bottom-up",
+				donc, dans l'exemple, de $e$ à $a$, et on le divise 
+				en sous-problème, comme l'illustre la figure 
+				\ref{fig:fptree:2}. C'est ici que les pointeurs entre
+				objets vont être utiles. En effet, dés qu'on tombe
+				sur un $e$ dans l'arbre, on peut suivre les pointeurs
+				pour trouver tous les autres $e$.
+			%
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.6]{Images/fptree_2.png}
+				\caption{}
+				\label{fig:fptree:2}
+			\end{figure}\noindent
+			%
+			\vspace*{-1cm}
+			%
+			\subparagraph{Division en FP-Tree conditionnel} On va ensuite
+				regarder, suffixe par suffixe, quel itemsets sont fréquents
+				pour chaque sous-problème.\hl{ L'obtention d'un FP-Tree 
+				conditionnel se fait par $cocov$}, défini précédemment, 
+				les ID de transaction étant remplacés par des chemins 
+				de l'arbre. Ceci est illustré à la figure 
+				\ref{fig:fptree:3}. \hl{On peut y remarquer que $b$ est
+				supprimé de l'arbre (b)}. Ceci s'explique par le fait
+				que $b$ ne se retrouve qu'une seule fois dans l'arbre (a)
+				et le seul chemin partant de lui arrivant en $e$ a un 
+				support count de 1, on en conclut donc que tout chemin 
+				partant de $b$ vers $e$ est non fréquent. Comme chaque 
+				sous-problème est disjoint, on ne génère pas d'itemsets
+				dupliqués.
+			%
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.625]{Images/fptree_3}
+				\caption{}
+				\label{fig:fptree:3}
+			\end{figure}\noindent
+			%
+		%
+	%
 %
 \part{Analyse par clustering}
 %

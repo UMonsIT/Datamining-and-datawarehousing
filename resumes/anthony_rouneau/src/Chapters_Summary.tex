@@ -58,6 +58,10 @@
 %%%%% Custom text
 %
 %
+\makeatletter
+\@addtoreset{section}{part}
+\makeatother  
+%
 \renewcommand*\sfdefault{phv}
 \renewcommand*\rmdefault{ppl}
 %
@@ -604,6 +608,17 @@
 				\label{fig:tree:boundaries}
 			\end{figure}\noindent
 			%
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.45]{Images/one_rule.PNG}
+				\caption{\hl{Exemple de jeu de donnée ne pouvant pas
+				être classé}} 
+				\hl{en n'utilisant que des conditions sur 
+				des attributs\\ simple (il faudrait utiliser plusieurs
+				attributs)}
+				\label{fig:one_attribute}
+			\end{figure}\noindent
+			%
 		%
 	%
 	\section{Overfitting}
@@ -765,8 +780,6 @@
 				il faut que la division permette d'améliorer 
 				la classification d'au moins deux objets d'entraînement.}
 				%
-			%
-			\newpage
 			%
 			\paragraph{\point Description de longueur minimal (\hl{MDL})}~\\~\\
 				Approche venant de la théorie de l'information.
@@ -2149,6 +2162,1051 @@
 		%
 	%
 %
-\part{Analyse par clustering}
+\part{Analyse de clusters}
+	\alinea \hl{Cette analyse divise les données en groupes (clusters), qui
+		ont du sens, qui sont utiles, ou les deux.}
+	%
+	\paragraph{\point Buts du clustering}
+		\subparagraph{\hl{Clustering pour la Compréhension}} Le clustering
+			peut être utilisé pour classifier des objets, les clusters
+			représentant les classes et le clustering étant la manière
+			dont les objets sont classés. Ceci peut être utilisé en 
+			biologie (hiérarchie, taxonomie, classer de l'ADN, ...), 
+			en récupération d'information (recherche web, classement de
+			données récupérées automatiquement, ...), dans la prévision
+			climatique, en psychologie et en médecine (diagnostic, 
+			analyse de la distribution de pathogènes, ...) ou enfin le 
+			monde des affaires (informations sur les clients, comprendre
+			les intérêts de groupes de personnes, ...).
+		%
+		\subparagraph{\hl{Clustering pour l'Utilité}} 
+			\hl{Le clustering peut être
+			utilisé pour trouver l'"individu type" (prototype) 
+			d'un groupe de donnée.}
+			En effet, on peut trouver, pour chaque cluster formé, l'individu
+			qui représente le mieux le cluster. Cette approche est utilisée
+			pour réduire un \hl{jeu de donnée (pour l'analyser, on se concentre
+			sur l'individu le plus représentatif du jeu}), pour \hl{la 
+			compression des données} (prendre l'image la plus représentative
+			d'un ensemble d'image pour la compression vidéo, ...), ou encore
+			pour trouver efficacement les plus proches voisins d'une
+			donnée \hl{(si deux prototypes sont très éloignés, alors, les
+			objets du premier cluster ne peuvent pas être plus proches
+			voisins des objets du deuxième).}
+		%
+	%
+	\section{Approche générale}
+		\alinea Un clustering se base sur la notion de distances entre
+			individus d'un jeu de données. Au plus des objets du sein
+			d'un cluster sont proches, et au plus les clusters sont éloignés
+			les uns des autres, au mieux on pourra distinguer les groupes
+			de données.\\
+		%
+		~\\
+		%
+		\alinea De par la diversité des données que l'on peut traiter, 
+			on ne peut donner une\hl{ définition claire d'un cluster qu'au
+			cas par cas}. On peut néanmoins différencier une analyse
+			de clusters d'une classification par le fait qu'une classification
+			se base sur des labels connus à l'avance, tandis que l'analyse
+			par cluster tire des groupes à partir des données uniquement, 
+			c'est donc de la \hl{classification non-supervisée} (Ch. 4 = 
+			classification supervisée car on donne des labels connus à 
+			l'avance).
+		%
+		\subsection{Types de clustering}
+			\alinea \hl{Un clustering est un groupe de clusters.} Il y a 
+				plusieurs types de clustering.
+			%
+			\subsubsection{Clustering à partitions}
+				\alinea Les clusters sont simplement des p\hl{artitions 
+					disjointes} du jeu de données, où chaque objet
+					peut être rangé dans un et un seul cluster (partition).
+					\hl{On parle alors de clustering exclusif}, car
+					on n'a jamais qu'un objets appartient à deux clusters
+					différents.
+				%
+			%
+			\subsubsection{Clustering hiérarchique}
+				\alinea Si on permet à un cluster d'avoir des 
+					\hl{sous-clusters},
+					on peut les organiser en \hl{arbre} et avoir un clustering
+					dit "hiérarchique". On peut voir ce type comme
+					séquence de clustering à partitions.
+				%
+			%
+			\subsubsection{Clustering imbriqués (overlapping)}
+				\alinea Si on permet à un objet d'appartenir à \hl{plusieurs
+					clusters en même temps}, on parle de clustering
+					"overlapping".
+					On place alors les objets dans des clusters de "qualité
+					égale" pour chaque objet.			
+				%
+			%
+			\subsubsection{Clustering flou (fuzzy, probabilistic)}
+				\alinea Ce type de clustering donne une probabilité par cluster
+					pour un objet d'appartenir à chacun des cluster.
+					On a donc un \hl{poids entre 0 et 1} pour chaque cluster
+					pour chaque objet, mais \hl{la somme des poids d'un objet
+					fait toujours 1}.\hl{ On peut noter qu'on n'autorise pas un 
+					objet à appartenir à plusieurs classes en même temps}.
+					En effet, on va généralement réduire un tel clustering à un
+					clustering à partitions, où on place chaque objet dans le
+					cluster pour lequel il a le poids le plus élevé.
+				%
+			%
+			\subsubsection{Clustering complet}
+				\alinea \hl{Chaque objet est répertorié dans un cluster}, même
+					si ce premier est assez éloigné du centre du cluster.
+				%
+			%
+			\subsubsection{Clustering partiel}
+				\alinea Un objet n'est \hl{pas obligé d'être répertorié} 
+					dans un
+					cluster. En effet, \hl{un objet pourrait être du bruit
+					et n'appartenir en fait à aucune des classes} formées
+					par les clusters.
+				%
+			%
+		%
+		\newpage
+		%
+		\subsection{Types de clusters}
+			\alinea Il existe plusieurs types de clusters, illustrés
+				sur la figure \ref{fig:clusters}.
+			%
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=1.1]{Images/clusters.png}
+				\caption{}
+				\label{fig:clusters}
+			\end{figure}\noindent
+			%
+			\subsubsection{Bien séparés}
+				\alinea \hl{Cluster dans lequel chaque objet est plus proches
+					de chacun des autres objets du cluster que de n'importe
+					quel autre objet d'un autre cluster}. Définition
+					satisfaite uniquement si le jeu de données contient des
+					classes naturelles qui seront révélées par le clustering.
+				%
+			%
+			\subsubsection{Basés sur un protoype (centre)}
+				\alinea \hl{Cluster dans lequel chaque objet est plus proches
+					du protoype qui défini le cluster cluster que de n'importe
+					quel autre protoype}. Un prototype peut être défini
+					comme :\\~\\
+				%
+				\begin{tabular}{lp{12cm}}
+					\myul{\textbf{\hl{medoid}}} & 
+						\red{Centre calculé sur la moyenne de tous les
+							 membres du cluster}\\
+					\myul{\textbf{\hl{centroid}}} &
+						\red{Membre du cluster (\hl{donnée réelle}), le plus 
+							 proche du centre, de la moyenne.}					
+				\end{tabular}
+				%
+			%
+			\subsubsection{Basés sur un graphe}
+				\alinea Chaque objet est un noeud, et \hl{les clusters sont
+					des composantes connexes}, il n'y a pas de lien
+					entre deux clusters, mais tous les objets d'un
+					même cluster sont connectés entre-eux. On parle 
+					de \hl{"contiguity-based"} cluster quand il n'y a un lien
+					que si les deux objets connectés sont situés dans une
+					intervalle de distance défini.
+				%
+			%
+			\subsubsection{Basés sur la densité}
+				\alinea Chaque cluster est une région dense d'objet, 
+					qui est entourée de régions moins denses.
+				%
+			%
+			\subsubsection{Partageant une propriété (clusters conceptuels)}
+				\alinea Cette définition englobe toute les autres, étant
+					donné que deux objets appartiennent au même cluster
+					s'ils partagent une propriété. Il reste à définir
+					cette propriété (distance d'un centre, distance
+					entre eux, stackés, ...). Une définition \hl{trop complexe}
+					de cette propriété nous emmènerait dans le domaine
+					du \textit{\hl{pattern recognition}}.
+				%
+			%
+		%
+	%
+	\newpage
+	%
+	\section{K-Means}
+		\alinea Il s'agit d'un algorithme donnant des \hl{clusters basés
+			sur des prototypes}, formant un \hl{clustering à partitions},
+			et utilisant des \hl{centroids} comme prototype de cluster. 
+			L'algorithme peut être utilisé sur n'importe quel type de données
+			permettant la définition d'une mesure de distance. 
+			\hl{$K$ est le nombre de cluster voulu}. K-medoids correspond
+			à K-means dans lequel on a remplacé les centroids par des
+			medoids.\\
+		%
+		\alinea Les notations utilisées sont les suivantes :\\
+		\begin{center}
+			\begin{tabular}{|c|l|}
+				\hline
+				Symbole & Description\\
+				\hline
+				$x$ & Un objet.\\
+				$C_i$ & Le $i^{\text{ème}}$ cluster.\\
+				$c_i$ & Le centroid du cluster $C_i$.\\
+				$c$ & Le centroid de tous les points.\\
+				$m_i$ & Le nombre d'objets dans le $i^{\text{ème}}$ cluster.\\
+				$m$ & Le nombre d'objets dans le jeu de données.\\
+				$K$ & Le nombre de cluster.\\
+				\hline			
+			\end{tabular}
+		\end{center}
+		%
+		\subsection{K-Means basique}
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.7]{Images/k-means_algo.png}
+				\caption{L'algorithme basique pour K-Means}
+				\label{fig:kmeans:algo:basic}
+			\end{figure}\noindent
+			%
+			\alinea En choisissant les bonnes combinaisons de mesures 
+				de proximités et les types de centroids, K-Means 
+				converge toujours à une solution.
+				\hl{L'étape 5 est souvent remplacée par une condition
+				plus souple} (e.g. ne change plus à 1\% près).
+				\hl{L'algorithme est linéaire en $m$, et est efficace si 
+				$K$ est significativement plus petit que $m$.}
+			%
+			\subsubsection{Assigner des points à un cluster}
+				\alinea On a besoin d'une notion de distance
+					pour trouver le centroid le plus "proche".
+					\hl{Cette notion doit être la plus simple possible} 
+					car on va faire beaucoup de comparaisons.
+				%
+			%
+			\subsubsection{Choisir le nouveau centroid}
+				\alinea Chaque notion de distance vient avec sa fonction
+					objectif. \hl{Le centroid choisi sera le résultat de la
+					fonction objectif de la distance sélectionnée.}
+				%
+				\subparagraph{Données Euclidiennes} La fonction objectif
+					de la \textbf{distance Euclidienne} est la minimisation
+					de la somme des erreurs carrées (\hl{SSE}).
+					$$ \text{SSE} = 
+						\sum_{i=1}^{K}\sum_{x\in C_i} dist(c_i, x)^2 $$
+					On peut alors montrer que le \hl{centroid qui minimise 
+					cette erreur} est la moyenne (\hl{mean}).
+					$$ \text{mean} = c_i = \frac{1}{m_i}\sum_{x\in C_i} x $$
+					On peut noter que cette minimisation n'est pas optimale
+					pour tout le jeu de données. C'est un optimal local
+					pour les clusters et centroids choisi jusqu'à présent.\\
+					La distance de \hl{Manhattan}\footnote{Distance en
+					escalier, somme de la longueur de chaque marche} 
+					\hl{quand à elle va minimiser le médian des points du
+					cluster.}
+				%
+				\subparagraph{Documents écrits} On suppose que les données
+					sont placées dans des "document-term matrix". 
+					On cherchera ici a maximiser la cohésion des
+					documents
+					$$ \text{Total Cohesion} = 
+						\sum_{i=1}^{K}\sum_{x\in C_i} dist(c_i, x)^2 $$
+					\begin{figure}[H]
+						\centering
+						\includegraphics[scale=0.5]{Images/document.png}
+						\caption{}
+						\label{fig:document-term}
+					\end{figure}\noindent
+				%
+			%
+			\subsubsection{Choisir les centroids initiaux}
+				\subparagraph{Centroids aléatoires}	
+					Une \textbf{première technique} est de
+					faire plusieurs itérations en choisissant
+					les centroids au hasard, et on garde l'itération
+					qui minimise la SSE. \hl{Si on commence avec deux
+					centroids initiaux par pair de cluster, alors
+					ces centroids convergeront vers les vrais clusters}.
+					En pratique, la probabilité que ca arrive avec des grands
+					jeux de données est faible.
+				%	
+				\subparagraph{Clustering hiérarchique} Une autre technique
+					est de commencer avec un clustering hiérarchique,
+					et, prendre le clustering à k centres, et commencer avec
+					ces k centres. En pratique, c'est couteux en calcul,
+					et il faut que K soit petit par rapport à la taille
+					du jeu de données.
+				%		
+				\subparagraph{Farthest-first-traversal} Sélectioner
+					le premier point au hasard (ou prendre la moyenne 
+					générale) et \hl{pour chaque centroid initial suivant,
+					prendre le point le plus éloignés des centroids déja
+					choisis}. Le problème est que l'on pourrait sélectionner
+					du bruit comme centroid, et s'éloigner des vrais clusters.
+					On préfèrera donc prendre des groupes de points plutôt
+					que des points, un groupe aura moins de chance d'être du
+					bruit.
+				%
+			%
+		%
+		\subsection{Autres problèmes}
+			\alinea Ci-dessous seront listés quelques problèmes qu'il reste
+				à résoudre pour rendre l'algorithme robuste.
+			%
+			\subsubsection{Bruit}
+				\alinea Pour éviter que le clustering soit influencé
+					par le \hl{bruit, il peut être utile de le détecter et
+					de le supprimer}. \hl{Il est à noter que pour certaines
+					techniques de clustering, le bruit \textbf{n'est pas} à 
+					supprimer.} Une technique serait de faire une première
+					passe sur les données et de noter la contribution
+					de chaque point à la SSE, et de supprimer les points
+					induisant la plus grande erreur.
+				%
+			%
+			\subsubsection{Réduire la SSE en postprocessing}
+				\alinea Une manière simple de réduire la SSE est d'augmenter
+					$K$ afin de réduire la distance entre les points et leur
+					centroid, mais en pratique on ne veut pas augmenter le
+					nombre de clusters.\\
+				%
+				\alinea On peut noter que la SSE total est la somme de
+					la SSE apportée par chaque cluster. On a donc \hl{deux
+					techniques permettant de réduire la SSE en augmentant
+					le nombre de clusters}.
+				%
+				\subparagraph{Diviser un cluster} Le cluster amenant la
+					plus grande erreur.
+				%
+				\subparagraph{Placer un nouveau centroid} On ajoute
+					un nouveau cluster, dont le centroid sera le point le 
+					plus éloigné de tout les autres.\\
+				~\\~\\
+				%
+				\alinea \hl{Deux techniques réduisant la SSE en réduisant le
+					nombre de cluster sont les suivantes.}
+				%
+				\subparagraph{Disperser un cluster} On dissout le cluster
+					amenant le plus d'erreur et on réparti ses éléments dans
+					les autres clusters.
+				%
+				\subparagraph{Fusionner deux clusters} Les clusters
+					dont les centroids sont les plus proches l'un de l'autre
+					sont fusionnés.
+				%
+			%
+			\subsubsection{Mettre à jour les centroids}
+				\alinea Mettre à jour les centroids après chaque ajout
+					d'un élément à un cluster implique de vérifier
+					aussi si ses éléments proches ne doivent pas changer 
+					de cluster (est-ce que le centroid mis à jour
+					est plus proche que le centroid actuel de l'objet ? Si
+					oui, il faut le changer de cluster).\hl{ Une mise à jour 
+					incrémentale évite d'avoir des clusters vides.}\\
+				%
+				\alinea Le point négatif est que cela induit \hl{une dépendance
+					sur l'ordre} dans lequel les objets sont placés dans
+					les clusters. Pour y remédier, on va rendre cet ordre 
+					aléatoire.
+				%
+			%
+		%
+		\subsection{Bisecting K-Means}
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.7]{Images/bisecting_k-means_algo.png}
+				\caption{}
+				\label{fig:k-means:bissecting:algo}
+			\end{figure}\noindent
+			Entre l'étape 8 et 9, on va raffiner le clustering choisi, en 
+				réappliquant le K-Means basique avec les centroids
+				du clustering
+				choisi à l'étape 8.\hl{ Ceci permettra d'avoir un optimum
+				local.}
+				\hl{On peut utiliser cet algorithme pour faire un clustering 
+				hiérarchique, en sauvegardant chaque étape.}
+			%
+		%
+		\subsection{Types de cluster problématiques}
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.85]{Images/k-means_difficulties.png}
+				\caption{}
+				\label{fig:k-means:difficulties}
+			\end{figure}\noindent
+			%
+			Le problème avec les types de clusters ci-dessus est que 
+				\hl{la fonction
+				objectif ne colle pas avec la définition des clusters} 
+				qui ne sont
+				pas bien séparés. De plus, pour les données ne permettant pas
+				vraiment de définir un centroid, il faut préférer le 
+				\hl{K-Medoid}.
+			%
+		%
+		\subsection{K-Means comme problème d'optimisation}
+			\alinea \hl{On pourrait chercher, parmi toutes les possibilités de 
+				clustering, celle qui satisfait le mieux la fonction objectif.}
+				Le problème étant que c'est infaisable à cause du nombre 
+				de calcul 
+				à faire. Une méthode d'approximation est la méthode gloutonne,
+				qui choisit à chaque étape le choix qui a le meilleur score.\\
+			%
+			\alinea On peut de cette manière vérifier que c'est bien 
+				le centroid	à la moyenne qui permet de minimiser la SSE.\\
+			%
+			~\\
+			%
+			\alinea On peut également changer de distance et de fonction 
+				objectif. Si on prend la distance de Manhattan ($L_1$) 
+				et la somme des erreurs absolues (SAE).
+				$$ \text{SAE} = \sum^{K}_{i=1} \sum_{x\in C_i} dist_{L_1}
+						(c_i, x) $$
+				Et en résolvant l'équation de minimisation pour $c_i$, 
+				on trouve
+				bien que le centroid qui minimise la fonction est le médian
+				des donnée du cluster.
+			%
+		%
+	%
+	\section{Clustering hiérarchique agglomératif}
+		\alinea Il y a deux manière de considérer un clustering hiérarchique.
+		\\~\\
+		%
+		\begin{tabular}{lp{12cm}}
+			\myul{\textbf{\hl{Agglomératif}}} & 
+				\red{Commence le clustering en considérant chaque point
+					 comme un cluster. Il y a donc $m$ clusters au départ,
+					 et à chaque étape, on fusionne les clusters les
+					 plus proches. Nécessite la notion de proximité de
+					 entre clusters.}\\
+			\myul{\textbf{\hl{Divisif}}} & 
+				\red{Commence avec un seul cluster comprenant tous
+					 les points et divise un cluster à chaque étape.}
+		\end{tabular}~\\~\\
+		On va donc discuter ici de la méthode agglomérative. On
+		peut représenter le résultat d'un clustering hiérarchique avec 
+		un dendrogramme (cf. figure \ref{fig:dendrogram}). La complexité
+		est de $O(m^2log m)$ en temps et $O(m^2)$ en espace, ce qui est
+		très couteux pour $m$ grand.
+		%
+		\begin{figure}[H]
+			\centering
+			\includegraphics[scale=0.8]{Images/dendrogram.png}
+			\caption{}
+			\label{fig:dendrogram}
+		\end{figure}\noindent
+		%
+		\subsection{Algorithme basique}
+			\alinea En démarrant avec un cluster par objet, on a 
+				l'algorithme suivant.
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.8]{Images/basic_hierarchical_algo.png}
+				\caption{}
+				\label{fig:hierarchical:basic_algo}
+			\end{figure}\noindent
+			%
+			\alinea Il faut maintenant définir la notion de procimité entre
+				clusters.
+			%
+			\subparagraph{Distances entre les objets} On peut définir la 
+				proximité entre deux cluster, par la distance maximale (MAX),
+				minimale (MIN) ou moyenne (group average = UPGMA)
+				qui existe entre les différents
+				points des deux clusters. Ceci est représenté sur la figure
+				\ref{fig:hierarchical:distances}. On peut noter que
+				MAX essaie de minimiser le diamètre des clusters, pour 
+				qu'ils soient le plus groupés possible.
+				\begin{figure}[H]
+					\centering
+					\includegraphics[scale=1.0]{Images/%
+						hierarchical_distances.png}
+					\caption{}
+					\label{fig:hierarchical:distances}
+				\end{figure}\noindent
+			%
+			\subparagraph{Distances entre prototypes} On peut aussi définir
+				la proximité entre deux clusters comme la proximité entre 
+				leur prototype respectif.
+			%
+			\subparagraph{Méthode de Ward} \hl{Un cluster est ici représenté
+				par son centroid, elle mesure l'augmentation de SSE que
+				résulte de la fusion de deux clusters.} Cette méthode
+				est \hl{la seule} parmi celle présentées qui 
+				\hl{peut réduire la	métrique de distance lorsqu'on 
+				fusionne deux clusters}. C'est en réalité ce qui est
+				utilisé en général dans le K-Means.
+			%
+		%
+		\subsection{La formule de Lance-Williams}
+			\alinea Cette formule permet de \hl{généraliser} toutes
+				les définitions de proximité en une seule. Il suffit
+				de modifier les paramètre de la formule pour passer
+				d'une définition à l'autre. De plus, des \hl{algorithmes
+				performants} utilisant cette formule existent.
+			%
+		%
+		\subsection{Lacunes majeures}
+			\alinea La principale lacune du clustering hiérarchique est
+				qu'il est très gourmand en ressources, même si on utilise
+				déjà des techniques d'approximation.
+			%
+			\subsubsection{Gérer les clusters de tailles différentes}
+				\alinea Il peut être intéressant de considérer la taille
+					des clusters que l'on souhaite fusionner. Les méthodes
+					vues jusqu'à présent considèrent tous les clusters
+					comme égaux, on a utilisé la méthode dite
+					\textbf{unweighted}, on a pas mis de poids sur les 
+					points. L'autre méthode, \textbf{weighted}, peut
+					être utilisé dans le cas où les classes sont
+					inégalement représentées. La distance "group average"
+					a été adaptée aux deux méthodes. La unweighted
+					est juste la moyenne des distances et est appelée
+					UPGMA. La méthode weighted est quant à elle appelée
+					WPGMA. Soit deux clusters $R$ et $Q$, où $R$ a été 
+					formé en fusionnant $A$ et $B$.
+					\begin{align*}
+						\text{UPGMA}:&\ \ prox(R, Q) =&
+							\frac{\sum_{{x \in R, 
+							y \in Q}}dist(x, y)}%
+								{m_R \cdot m_Q} \\
+						\text{WPGMA}:&\ \ prox(R, Q) =&
+							\frac{prox(A, Q) + prox(B, Q)}{2}
+					\end{align*}
+				%
+			%
+			\subsubsection{Les fusions sont finales}
+				\alinea \hl{Une fois que deux clusters sont fusionnés, on ne
+					peut plus en modifier les éléments. En effet, 
+					Avec la méthode de Ward et en minimisant la SSE, 
+					la fusion de deux clusters ne représente pas un
+					minima local si l'on regarde à la SSE totale. }
+					En effet, il se peut qu'un élément d'un cluster soit
+					plus proche d'un centroid d'un autre cluster que le sien.
+				%
+			%
+			\subsubsection{Forces et faiblesses}
+				\alinea La raison principale de l'utilisation des
+					algorithmes de clustering hiérarchiques est le
+					besoin d'une hiérarchie, d'une taxonomie dans les
+					donnée.
+				%
+			%
+		%
+	%
+	\newpage
+	%
+	\section{DBSCAN}
+		\alinea Cette technique \hl{produit un clustering basé sur la densité.} 
+			Technique très efficace, sauf quand les clusters ont des densités
+			très différentes entre eux, et quand les données ont 
+			un grand nombre de dimensions (attributs).
+		%
+		\subsection{Densité}
+			\alinea Pour définir la densité autour d'un point, on utilise 
+				la méthode \hl{center-based}. Cette méthode consiste à compter
+				le nombre de points contenu dans un rayon, \hl{$Eps$}, autour
+				de ce point, le point se compte lui-même. Sa complexité 
+				en temps est \\
+				$O(m \times \text{temps pour trouver les
+				voisins dans le rayon } Eps)$, ce qui veut dire qu'avec
+				la bonne structure de donnée (KD-Tree, ...), on peut
+				avoir une complexité en $O(m \log m)$.\\
+			%
+			~\\
+			%
+			\alinea En utilisant cette technique on peut alors classifier 
+				un point comme étant un : 
+				\begin{itemize}
+					\setlength{\itemsep}{0pt}
+					\setlength{\parskip}{0pt}
+					\setlength{\parsep}{0pt}
+					\item[(1)] \textbf{Core Point} : \red{à l'intérieur d'une
+						région dense.} Un point est considéré comme tel
+						si il y a au moins \hl{$MinPts$} dans un rayon 
+						de $Eps$ autour de lui, lui y comprit.
+					\item[(2)] \textbf{Border Point} : \red{sur le bord d'une
+						région dense, il a un ou des Core Points dans un
+						rayon de $Eps$ autour de lui.} 
+						\hl{Un border point peut avoir beaucoup
+						de Core Point dans son voisinage.}
+					\item[(3)] \textbf{Noise/Background Point} : \red{dans une
+						région peu occupée.} Il n'est ni un Core Point, ni
+						un Border Point.
+				\end{itemize}
+			%
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.8]{Images/dbscan_eps.png}
+				\caption{}
+				\label{fig:dbscan:eps}
+			\end{figure}\noindent
+			%
+		%
+		\newpage
+		%
+		\subsection{Algorithme}
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=1]{Images/dbscan_algo.png}
+				\caption{}
+				\label{fig:dbscan:algo}
+			\end{figure}\noindent
+			%
+			\subsubsection{Valeur des paramètres}
+				\alinea Il faut maintenant fixer $MinPts$ et $Eps$.
+					Supposons qu'un nombre $k$ soit fixé (\hl{en pratique, 
+					DBSCAN prend k=4}), alors, on appelle $k-dist$ la 
+					distance entre un point et son $k^{\text{ème}}$ voisin 
+					le plus proche. Si on trie les points par ordre 
+					croissant pour leur valeur de $k-dist$, on pourra
+					normalement observer un changement brusque dans la 
+					courbe, ce changement brusque représente 
+					normalement la limite entre le non-bruit et le bruit.
+					\hl{On prendra donc la valeur de $k-dist$ à ce changement
+					brusque comme $Eps$ et $MinPts = k$.} Ceci est illustré
+					à la figure \ref{fig:dbscan:k}.\\
+					\begin{minipage}{0.475\textwidth}
+						\begin{figure}[H]
+							\centering
+							\includegraphics[scale=0.8]{Images/dbscan_k.png}
+							\caption{}
+							\label{fig:dbscan:k}
+						\end{figure}\noindent
+					\end{minipage}\hfill
+					\begin{minipage}{0.475\textwidth}
+						\begin{figure}[H]
+							\centering
+							\includegraphics[scale=0.8]{Images/%
+								dbscan_density.png}
+							\caption{}
+							\label{fig:dbscan:density}
+						\end{figure}\noindent
+					\end{minipage}\noindent~\\~\\
+				%
+			%
+			\subsubsection{Problème de densités variables}
+				\alinea \hl{Si des clusters ont des densités très différentes,
+					on ne pourra pas les détecter tous en même temps.}
+					En effet, comme on le voit sur la figure 
+					\ref{fig:dbscan:density}, $A$ et $B$ sont beaucoup plus
+					dense que $C$ et $D$. Si on arrive à distinguer $A$ et, 
+					$B$, alors $C$ et $D$ sont considérés comme du bruit, 
+					et si on arrive à discerner $C$ et $D$, $A$, $B$, et 
+					le bruit dans leurs alentours risquent d'être confondu
+					en un seul cluster.
+				%
+			%
+		%	
+	%
+	\section{\'Evaluation des clusters}
+		\alinea Appelée aussi la \textbf{validation de cluster},
+			l'\hl{évaluation}
+			d'un cluster est \hl{importante car les algorithmes de clustering
+			trouveront des clusters, même dans des données à priori non 
+			classifiables.} On pourrait comparer le résultat des trois
+			algorithmes vus et, si les clusters ne se ressemble pas 
+			entre les trois, alors on en conclut que ce sont des données
+			aléatoire, \hl{mais ça ne marche pas pour un grand nombre
+			d'attributs}. \\
+		%
+		~\\
+		%
+		\alinea Voici les cinq problématiques de la validation de cluster.
+		%
+		\begin{enumerate}
+			\setlength{\itemsep}{0pt}
+			\setlength{\parskip}{0pt}
+			\setlength{\parsep}{0pt}
+			\item Déterminer si les données sont "clusterisables" ou si, 
+				au contraire, elles ont un caractère aléatoire.
+			\item Déterminer le nombre correct de clusters.
+			\item \'Evaluer la qualité du clustering sans se baser
+				sur des informations externes.
+			\item \'Evaluer la qualité du clustering en se basant
+				sur des informations externes, comme des labels connus
+				pour chaque objet ou autre.
+			\item Comparer deux clustering pour déterminer lequel 
+				est le meilleur.
+		\end{enumerate}
+		On y distingue trois types de problèmes : \\~\\
+		\begin{tabular}{lp{14cm}}
+			\myul{\textbf{\hl{Non-supervisé}}}	& 
+				\red{Mesure la qualité sans faire appel à des
+					 ressources externes.} Ces mesures sont aussi 
+					 appelées \textbf{internal indices}.
+					 La SSE est une mesure non-%
+					 supervisée. On distingue deux types principaux
+					 de mesures non-supervisées : \textbf{cluster cohesion}
+					 et \textbf{cluster separation}. Les problèmes 
+					 1 à 3 sont non-supervisés.\\
+			\myul{\textbf{\hl{Supervisé}}}	&
+				\red{Mesure qui teste le clustering avec un ensemble 
+					 d'informations externes (labels, ...).} 
+					 Elles sont aussi appelées \textbf{external indices}.
+					\hl{ L'\textit{entropy} est une mesure supervisée} car
+					 elle compare la correspondance avec les labels
+					 connus des objets. Le problème 4. est supervisé.\\
+			\myul{\textbf{\hl{Relatif}}} & 
+				\red{Mesure visant à comparer différents clustering 
+					 ou clusters, \hl{elle peut être 
+					 supervisée ou non-supervisée}.} Comparer deux 
+					 cluster avec leur SSE respective est une mesure
+					 relative. Le problème 5. est relatif.
+		\end{tabular}
+		%
+		\subsection{Non-supervisée avec cohésion et séparation}
+			\alinea De manière générale, on définit la validité d'un 
+				clustering (totale) par rapport à une somme pondérée
+				reprenant la validité de chaque cluster.
+				$$ \text{validité totale} = \sum_{i=1}^{K} w_i\cdot
+						 					   validity(C_i) $$
+				où $validity$ peut être la cohésion, la séparation, 
+				ou une combinaison des deux.\\ 
+				Il reste donc à définir les mesures de cohésion et de
+				séparation pour différents types de clustering.
+				De manière générale, la \textbf{cohésion} est la
+				mesure qui indique à quel point les éléments d'un
+				cluster sont proches les uns des autres, tandis que
+				la \textbf{séparation} indique à quel point
+				les différents clusters sont isolés les uns des autres.\\
+			%
+			\alinea Ces mesures peuvent être utilisées pour évaluer
+				un clustering entier ou un seul cluster. Un cluster
+				avec une grande cohésion est à préférer, et une faible
+				séparation indique le besoin de fusionner des clusters.
+			%
+			\subsubsection{Cluster basés sur des graphes}
+				\alinea La cohésion est définie comme la somme des poids
+					sur les liens entre les objets du cluster. La 
+					séparation est définie comme la somme des proximités
+					entre les objets des deux clusters. $proximity$ peut
+					être une mesure de similitude ou de dissimilitude. 
+					Cette mesure est reportée sur un \hl{graphe de proximité},
+					dans lequel les noeud sont les objets et les liens
+					ont comme poids la proximité entre les deux objets  
+					qu'ils relient.
+					\begin{align*}
+						cohesion(C_i) &= \sum_{x\in C_i, y\in C_i}
+								proximity(x, y)\\
+						separation(C_i, C_j) &= \sum_{x\in C_i, y\in C_j}
+								proximity(x, y)
+					\end{align*}
+				%
+			%
+			\subsubsection{Cluster basés sur les prototypes}
+				\alinea Pour ce type, la cohésion est définie comme
+					la somme des distances entre les objets du cluster 
+					et le prototype du cluster. La séparation est la 
+					proximités entre les prototypes des deux clusters.
+					($c$ est le prototype global). \hl{Si on prend
+					le carré de la distance Euclidienne comme mesure de 
+					proximité, la cohésion devient alors la mesure de la
+					SSE.}
+					\begin{align*}
+						cohesion(C_i) &= \sum_{x\in C_i}
+								proximity(x, c_i)\\
+						separation(C_i, C_j) &= proximity(c_i, c_j)\\
+						separation(C_i) &= proximity(c_i, c)
+					\end{align*}
+					Lorsque la distance Euclidienne est choisie pour mesurer 
+					la proximité, la mesure de séparation entre clusters
+					se fait généralement par la SSB (somme des carrés
+					entre les groupes).
+					$$ \text{SSB Totale} = \sum_{i=1}^{K} m_i \cdot 
+							dist(c_i, c)^2 $$
+					On peut dériver cette formule pour l'exprimer en 
+					fonction de $c_i$ et $c_j$, d'où les deux définitions
+					de séparations données plus haut.
+				%
+			%
+			\subsubsection{Mesures globales}
+				\alinea \hl{On peut noter que n'importe quelle mesure 
+					non-supervisée de validité de cluster peut être utilisée
+					comme fonction objective d'un algorithme de clustering.}
+				%
+			%
+			\subsubsection{Graphe vs prototypes}
+				\alinea \hl{Les mesures de cohésions et de séparations des 
+					cluster basés sur des graphes et des clusters 
+					basées sur des prototypes paraissent fort différentes,
+					mais pour certaines valeurs, elles sont équivalente.}
+				%
+			%
+			\subsubsection{Lien entre Cohésion et Séparation}
+				\alinea Il y a parfois un lien fort entre ces deux
+					mesures. En plus, \hl{la somme entre la SSE et la SSB
+					donne une constante appelée TSS} (somme totale des
+					carrés), \hl{qui est la même pour tous les 
+					clusterings possible au sein d'un jeu de données}.
+					$$ \text{TSS} = \sum_{i=1}^{K} \sum_{x \in C_i} (x - c)^2
+						   = \text{SSE} + \text{SSB} $$
+					Pour rappel, \hl{\textbf{SSE}} est la 
+					sommes des erreurs carrées et 
+					mesure la séparation à l'intérieur 
+					d'un cluster. \hl{\textbf{SSB}}
+					est la somme des carrés entre cluster et mesure la
+					séparation inter cluster. Enfin, 
+					\hl{\textbf{TSS}} est la somme 
+					totale des carrés et ne dépend pas de la manière
+					dont les objets sont répartis dans les clusters.
+				%
+			%
+			\subsubsection{Coefficient de silhouette}
+				\alinea \hl{Le coefficient de silhouette combine la cohésion
+					et la séparation.} $sil_i = \frac{b_i - a_i}%
+					{\max(a_i, b_i)}$ .Le coefficient a donc deux composantes;
+					$a_i$ et $b_i$, $a_i$ étant la distance 
+					moyenne entre le point $i$ et les points de son cluster, 
+					et $b_i$ étant la distance moyenne minimale 
+					entre le point et les points d'un autre cluster.
+					\hl{Minimiser $a_i$ c'est augmenter la cohésion,
+					et maximiser $b_i$ c'est augmenter la séparation.}\\
+				%
+				\alinea	Ce coefficient varie entre -1 et 1.
+					S'il est négatif, cela veut dire que $a_i$ est 
+					plus grand que $b_i$.
+					Ce la dénoterait donc que l'objet devrait se trouver
+					dans l'autre cluster ayant servi au calcul de $b_i$.\\
+				%
+				\begin{figure}[H]
+					\centering
+					\includegraphics[scale=1.0]{Images/silhouette.png}
+					\caption{}
+					\label{fig:eval:silhouette}
+				\end{figure}\noindent
+				La silhouette d'un clustering peut être obtenu en faisant
+				la moyenne de la silhouette de tous les points.
+				%
+			%
+		%
+		\subsection{Non-supervisée avec matrice de proximité}
+			\alinea Le principe est de calculer la corrélation entre
+				une matrice de proximité dite "idéale" et la vrai matrice.
+				Pour chaque objet $i$, la case $i, j$ de la \hl{matrice
+				\textbf{idéale} vaudra 1 si $i$ et $j$ sont dans le
+				même cluster et 0 sinon.} Corrélation calculée au 
+				dessous ou en dessous de la diagonale de la \hl{matrice},
+				étant donné qu'elle est \hl{symétrique}. Au plus la
+				corrélation est élevée, au mieux c'est. Pas très 
+				bon en pratique pour des clusters basés sur la densité 
+				ou "contiguity-based.\\
+			%
+			\alinea Il es généralement plus simple de travailler avec
+				une mesure de similarité plutôt que de distance.
+				On peut calculer la similarité $s$ entre deux 
+				objets $i, j$ de la manière suivante :
+				$$ s(i, j) = 1-\frac{dist(i, j) - dist_{min}}%
+				{dist{max} - dist_{min}} $$
+			%
+			\alinea On peut aussi visualiser la corrélation pour déterminer
+				si il y bien des clusters clairs qui se dessine (cf. 
+				figure \ref{fig:clustering:correl1}) qui indiquent
+				que les données sont classifiables, ou qui sont
+				plus \hl{diffus} (cf. figure \ref{fig:clustering:correl2})
+				et donc qui reflètent un \hl{caractère aléatoire}.
+			%
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.75]{Images/correl_1}
+				\caption{Clusters clairs, facilement distinguable}
+				\label{fig:clustering:correl2}
+			\end{figure}\noindent
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.75]{Images/correl_2}
+				\caption{Clusters diffus, données aléatoires}
+				\label{fig:clustering:correl2}
+			\end{figure}\noindent
+		%
+		\subsection{Non-supervisée pour clustering hiérarchique}
+			\begin{tabular}{lp{13cm}}
+				\myul{\textbf{\hl{Cophenetic distance}}} &
+					\red{Distance entre deux objets défini par la 
+						 \hl{proximité} à laquelle une technique de 
+						 clustering hiérarchique agglomératif
+						 \hl{met les deux objets dans le même cluster
+						 pour la première fois.}} Autrement dit, 
+						 si deux clusters éloignés d'une distance
+						 $d$ l'un de l'autre sont choisis pour
+						 être fusionnés, alors, la distance cohpenetic
+						 entre les objets des deux cluster sera de $d$.\\
+				\myul{\textbf{\hl{CPCC}}} &
+					\red{\textbf{CoPhenetic Correlation Coefficient}, 
+						corrélation entre les entrées de la matrice de
+						 distance cophenetic et les entrées de la 
+						 matrice de dissimilarités originale.} On l'utilise
+						 pour comparer des techniques hiérarchiques
+						 entre elles pour un même jeu de données. Le score
+						 le plus haut est le mieux.
+			\end{tabular}
+			%
+		%
+		\subsection{Déterminer le nombre idéal de clusters}
+			\alinea Observer la variation de la SSE ou du coefficient
+				de silhouette en fonction du nombre de clusters permet
+				d'avoir une idée sur le nombre idéal. En pratique,
+				c'est parfois pas très clair...
+			%	
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.8]{Images/clusters_number.png}
+				\caption{En reprenant l'exemple de la figure
+				\ref{fig:eval:silhouette}} \hl{10 est le nombre idéal car
+				il minimise SSE et maximise silhouette}.
+				\label{fig:eval:clusters_number}
+			\end{figure}\noindent
+			%
+		%
+		\newpage
+		%
+		\subsection{Tendance au clustering}
+			\alinea On peut évaluer la tendance qu'à un jeu de données à 
+				avoir des clusters naturels \hl{sans y appliquer de 
+				techniques de clustering}. On va pour cela appliquer
+				des tests statistiques, comme la méthode de \textbf{Hopkins}.\\
+			%
+			~\\
+			%
+			\alinea Pour un nombre $p$ fixé, on va générer $p$ nombres
+				aléatoire dans le jeu de données et sélectionner
+				$p$ données du jeu de données initial. Si $u_i$ représente
+				le distance entre le point $i$ du jeu aléatoire et son
+				plus proche voisin \hl{dans le jeu donnée initial}, et $w_i$
+				la distance entre le point $i$ du jeu de donnée initial
+				et son plus proche voisin dans le jeu de donnée initial,
+				$$ H = \frac{\sum_{i=1}^{p} w_i}{\sum_{i=1}^{p} u_i +
+												 \sum_{i=1}^{p} w_i} $$
+				Un jeu de donnée aura donc \hl{tendance au clustering pour
+				un H proche de 0}. En effet, il faudrait que la plus proche
+				distance à l'intérieur de jeu de données initial ($w_i$)
+				soit plus petite (plus proche) que la plus proche distance
+				entre les données aléatoire et le jeu de donnée initial
+				($u_i$), qui est sensée être élevée (éloignée). Au contraire
+				si $u_i$ tend vers 0 (distance proche avec les données 
+				aléatoire), H tendra vers 1.
+			%
+		%
+		\subsection{Mesures supervisées}
+			\alinea On distingue deux types principaux de techniques :
+				les \textbf{orientées classification} et les 
+				\textbf{orientées similarités}.
+			%
+			\subsubsection{Mesures orientées classification}
+				\alinea On y retrouve l'entropy, la pureté, la precision,
+					le recall et la F-mesure. On vérifie donc que 
+					les objets d'un même cluster ont le même label de
+					classe.\\~\\
+				%
+				\begin{tabular}{lp{15.25cm}}
+					\myul{\textbf{\hl{Entropy}}} & 
+						\red{On commence par calculer la distribution
+							 des classes, i.e. $p_{ij}$ la probabilité
+							 que l'objet $i$ qu'un membre du cluster $i$
+							 appartiennent à la classe $j$. On a 
+							 \hl{$p_{ij} = \frac{m_{ij}}{m_i}$}, 
+							 avec $m_{ij}$
+							 le nombre d'objets du cluster $i$ qui
+							 appartiennent à la classe $j$ et $m_i$ le
+							 nombre total d'objets du cluster $i$.
+							 L'entropie est ensuite calculée de manière
+							 classique : 
+							 \hl{$e_i = -\sum_{j=1}^{L} p_{ij} log_2 p_{ij}$},
+							 où $L$ est le nombre total de classe.} L'entropy
+							 totale se calcule alors en une somme pondérée
+							 par la taille des clusters :
+							 $e = -\sum_{i=1}^{K} \frac{m_i}{m} e_{i}$
+				\end{tabular}
+				%
+			%
+			\newpage
+			%
+			\subsubsection{Mesures orientée similarités}
+				\alinea On y compare \textbf{(1)} 
+					la matrice des similarités idéales
+					vue auparavant, où la case $i, j$ 
+					vaudra 1 si $i$ et $j$ sont dans le
+					même cluster et 0 sinon avec (2) la \textbf{matrice
+					idéale de similarité de classe} où la case
+					$i, j$ vaut 1 si les objet $i$ et $j$ ont
+					le même label de classe. \hl{On mesure donc la 
+					corrélation entre (1) et (2), qui est appelée 
+					la statistique $\Gamma$.}\\
+				%
+				~\\
+				%
+				On classe chaque paire d'objets selon quatre catégories.
+				($f_{11}$ étant par exemple le nombre de paires d'objets
+				ayant le même label de classe et appartenant au même 
+				cluster).\\
+				\begin{center}
+				\begin{tabular}{|c|c|c|}
+				\hline
+				                    & Même cluster & Différents clusters\\
+				\hline
+				Même classe         &    $f_{11}$  &       $f_{10}$     \\
+				\hline				
+				Différentes classes &    $f_{01}$  &       $f_{00}$     \\
+				\hline
+				\end{tabular}
+				\end{center}~\\
+				%
+				Les deux mesures de corrélation les plus répandues sont:
+				\begin{align*}
+					\text{Rand tatistic} &= \frac{f_{00} + f_{11}}%
+						{f_{00} + f_{01} + f_{10} + f_{11}}\\
+					\text{\hl{Jaccard coefficient}} &= \frac{f_{11}}{f_{01} + 
+						f_{10} + f_{11}}
+				\end{align*}
+				%
+			%
+			\subsubsection{Mesure supervisée pour clustering hiérarchique}
+				\alinea On utilise une F-mesure pondérée.
+				$$ F = \sum_{j} \frac{m_j}{m} \max_{i} F(i, j) $$
+				%
+			%
+		%
+		\subsection{Interpréter les mesures}
+			\alinea Une fois qu'on a une valeur de "qualité" d'un 
+				clustering, on peut se demander si cette valeur est
+				significative ou pas (clustering vraiment bon, 
+				vraiment mauvais, ou moyen ?). Pour ce faire, on 
+				peut se baser sur les valeurs max/min de la 
+				mesure et savoir si on en est proche, mais certaines
+				mesures n'ont pas de min/max.\\
+			%
+			\alinea \hl{On peut comparer la valeur d'une 
+				mesure avec la probabilité qu'avait cette
+				mesure d'obtenir cette valeur afin de 
+				conclure si oui ou 
+				non le clustering est aléatoire.}\\
+			%
+			~\\
+			%
+			\alinea On va donc, pour la mesure choisie, faire
+				des clustering sur des données aléatoires et
+				approcher les valeurs obetnues par une distribution
+				de probabilité. On effectue ensuite le clustering 
+				sur le jeu de données qui nous intéresse et 
+				on compare sa valeur pour la mesure avec la distribution
+				de probabilité. Si elle est éloignée (peu probable), 
+				alors le jeu de données n'est pas à caractère aléatoire,
+				mais si au contraire on obtient une valeur probable
+				(comme la moyenne de la Gaussienne de la figure 
+				\ref{fig:eval:random}), alors on a un clustering 
+				qui ressemble à un clustering de données aléatoire, 
+				les données ne sont donc pas clusterisables.
+			%
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.65]{Images/random.png}
+				\caption{}
+				\label{fig:eval:random}
+			\end{figure}\noindent
+			%
+		%
+	%
 %
 \end{document}

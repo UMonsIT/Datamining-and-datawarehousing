@@ -1575,7 +1575,7 @@
 				\begin{tabular}{lp{12cm}}
 					(1) \myul{\textbf{\hl{Génération de candidat}}} & 
 						\red{Génère des candidats de taille $k$ à partir 
-							des itemsets de taille $k-1$ déjà générés.}\\
+							des itemsets fréquents de taille $k-1$ déjà générés.}\\
 					(2) \myul{\textbf{\hl{\'Elagage des candidats}}} & 
 						\red{Supprime les candidats n'ayant pas assez de
 						\textit{support}.}
@@ -1618,7 +1618,7 @@
 			\subsubsection{$\mathbf{F_{k-1} \times F_1}$}
 				\alinea une autre méthode de génération est de 
 					créer des itemsets de taille $k$ en prenant 
-					les itemsets de taille $k-1$ et d'y rajouter 
+					les itemsets fréquents de taille $k-1$ et d'y rajouter 
 					un par un les objets fréquents (itemset de taille 1).\\
 				%				
 				\alinea La méthode respecte (b), mais pas (c). Une manière de 
@@ -1644,7 +1644,7 @@
 			%
 			\subsubsection{\hl{$\mathbf{F_{k-1} \times F_{k-1}}$}}
 				\alinea \hl{C'est la méthode utilisée en pratique}, 
-					elle consiste à fusionner deux itemsets de taille
+					elle consiste à fusionner deux itemsets fréquents de taille
 					$k-1$ qui ont chacun $k-2$ éléments en commun, tout
 					en \hl{gardant l'ordre lexicographique discuté au point
 					précédent}.\\
@@ -2297,12 +2297,13 @@
 					comme :\\~\\
 				%
 				\begin{tabular}{lp{12cm}}
-					\myul{\textbf{\hl{medoid}}} & 
+					\myul{\textbf{\hl{centroid}}} & 
 						\red{Centre calculé sur la moyenne de tous les
 							 membres du cluster}\\
-					\myul{\textbf{\hl{centroid}}} &
+					\myul{\textbf{\hl{medoid}}} &
 						\red{Membre du cluster (\hl{donnée réelle}), le plus 
-							 proche du centre, de la moyenne.}					
+							 proche du centre, de la moyenne.} C'est donc le 
+							 \hl{point le plus représentatif} du cluster.					
 				\end{tabular}
 				%
 			%
@@ -2730,8 +2731,8 @@
 					\item[(2)] \textbf{Border Point} : \red{sur le bord d'une
 						région dense, il a un ou des Core Points dans un
 						rayon de $Eps$ autour de lui.} 
-						\hl{Un border point peut avoir beaucoup
-						de Core Point dans son voisinage.}
+						\hl{Un border point peut avoir jusqu'à $MinPts -1$
+						Core Point dans son voisinage (rayon de $Eps$ autour de lui).}
 					\item[(3)] \textbf{Noise/Background Point} : \red{dans une
 						région peu occupée.} Il n'est ni un Core Point, ni
 						un Border Point.

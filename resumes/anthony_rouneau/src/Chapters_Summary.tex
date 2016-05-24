@@ -2421,6 +2421,8 @@
 					\end{figure}\noindent
 				%
 			%
+			\newpage
+			%
 			\subsubsection{Choisir les centroids initiaux}
 				\subparagraph{Centroids aléatoires}	
 					Une \textbf{première technique} est de
@@ -2442,12 +2444,21 @@
 				\subparagraph{Farthest-first-traversal} Sélectioner
 					le premier point au hasard (ou prendre la moyenne 
 					générale) et \hl{pour chaque centroid initial suivant,
-					prendre le point le plus éloignés des centroids déja
+					prendre le point le plus éloignés\footnote{%
+					La distance est ici définie comme la distance minimale
+					entre un point et les centroid déja choisi. On 
+					maximise donc cette distance minimale} 
+					des centroids déja
 					choisis}. Le problème est que l'on pourrait sélectionner
 					du bruit comme centroid, et s'éloigner des vrais clusters.
 					On préfèrera donc prendre des groupes de points plutôt
 					que des points, un groupe aura moins de chance d'être du
-					bruit.
+					bruit. Une fois que l'on a obtenu $k$ clusters, si on 
+					prend le point le plus éloigné de tous les prototypes,
+					on obtient un point d'un cluster existant 
+					(\hl{\textbf{pigeon hole principle}}) et \hl{le rayon
+					maximal de tous les cluster est défini par la distance
+					entre ce point et son prototype de cluster.}
 				%
 			%
 		%
@@ -2473,19 +2484,25 @@
 					nombre de clusters.\\
 				%
 				\alinea On peut noter que la SSE total est la somme de
-					la SSE apportée par chaque cluster. On a donc \hl{deux
+					la SSE apportée par chaque cluster.\\
+				%
+				~\\
+				%
+				\point On a donc \hl{deux
 					techniques permettant de réduire la SSE en augmentant
 					le nombre de clusters}.
 				%
 				\subparagraph{Diviser un cluster} Le cluster amenant la
 					plus grande erreur.
 				%
+				\newpage
+				%
 				\subparagraph{Placer un nouveau centroid} On ajoute
 					un nouveau cluster, dont le centroid sera le point le 
 					plus éloigné de tout les autres.\\
 				~\\~\\
 				%
-				\alinea \hl{Deux techniques réduisant la SSE en réduisant le
+				\point \hl{Deux techniques réduisant la SSE en réduisant le
 					nombre de cluster sont les suivantes.}
 				%
 				\subparagraph{Disperser un cluster} On dissout le cluster
@@ -2802,6 +2819,82 @@
 			%
 		%	
 	%
+	\section{EM-clustering}
+		\alinea Clustering basé sur les \hl{probabilités}. Il consiste 
+			en l'algorithme suivant :
+		%
+		\begin{figure}[H]
+			\centering
+			\includegraphics[scale=0.65]{Images/EM_algo.png}
+		\end{figure}\noindent
+		%
+		\begin{figure}[H]
+			\centering
+			\includegraphics[scale=0.65]{Images/EM_param.png}
+		\end{figure}\noindent
+		%
+		\vspace*{-1.5cm}
+		%
+		\begin{figure}[H]
+			\centering
+			\includegraphics[scale=0.65]{Images/EM_a.png}
+		\end{figure}\noindent
+		%
+		\vspace*{-1.5cm}
+		%
+		\begin{figure}[H]
+			\centering
+			\includegraphics[scale=0.65]{Images/EM_b.png}
+		\end{figure}\noindent
+		%
+		\alinea Le principe est donc de créer \hl{deux distributions
+			normales de 
+			probabilités, $f(A)$ et $f(B)$, définies par leur
+			$\mu$ et $\sigma$} respectifs (pour un exemple à 
+			deux clusters, on en créerait plus pour plus de
+			clusters), on veut ensuite maximiser la probabilité 
+			qu'a un objet $x$ d'appartenir à un cluster. 
+			L'étape 4 visant à 
+			modifier le centre et le rayon de chaque cluster
+			(et donc de chaque distributions) pour
+			maximiser cette probabilité. On \hl{maximise donc
+			le \textbf{log-likelihood}}, défini comme suit:
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.65]{Images/EM_log.png}
+			\end{figure}\noindent
+		%
+		\alinea On peut noter que les \hl{dénominateurs de 
+			$Pr(A | x)$ et de $Pr(B | x)$ sont les même}, 
+			et on a donc pas besoin de les calculer.
+		%
+	%
+	\newpage
+	%
+	\section{Clustering génétique}
+		\alinea Comme tout algorithme génétique, ce
+			clustering se base sur la définition de deux
+			opérateurs : le \textbf{\hl{cross-over}} et 
+			la \textbf{\hl{mutation}}.
+		%
+		\begin{figure}[H]
+			\centering
+			\includegraphics[scale=0.65]{Images/genetic_principle.png}
+		\end{figure}\noindent
+		%
+		\begin{figure}[H]
+			\centering
+			\includegraphics[scale=0.65]{Images/genetic_operators.png}
+		\end{figure}\noindent
+		%
+		\begin{figure}[H]
+			\centering
+			\includegraphics[scale=0.65]{Images/genetic_algo.png}
+		\end{figure}\noindent
+		%
+	%
+	\newpage
+	%
 	\section{\'Evaluation des clusters}
 		\alinea Appelée aussi la \textbf{validation de cluster},
 			l'\hl{évaluation}
@@ -3022,6 +3115,29 @@
 				\label{fig:clustering:correl2}
 			\end{figure}\noindent
 		%
+		\subsection{Non-supervisée sur les attributs}
+			\begin{minipage}{0.4\textwidth}
+				Le \hl{coefficient de Pearson} est une mesure
+					linéaire des \hl{relations entre les attributs}.
+				%
+				$\overrightarrow{x}$ et $\overrightarrow{y}$ représentant
+					les vecteurs de valeurs des attributs de deux 
+					objets.\\
+				%
+				$\overrightarrow{x} = (x_1, x_2, \ldots, x_n)$, \\
+				$\overrightarrow{y} = (y_1, y_2, \ldots, y_n)$
+				%
+			\end{minipage}\hfill
+			\begin{minipage}{0.55\textwidth}
+				\begin{figure}[H]
+					\centering
+					\includegraphics[scale=0.6]{Images/pearson.png}
+				\end{figure}\noindent
+			\end{minipage}
+			%
+		%
+		\vspace*{-0.5cm}
+		%
 		\subsection{Non-supervisée pour clustering hiérarchique}
 			\begin{tabular}{lp{13cm}}
 				\myul{\textbf{\hl{Cophenetic distance}}} &
@@ -3045,15 +3161,18 @@
 			\end{tabular}
 			%
 		%
+		\vspace*{-0.5cm}
+		%
 		\subsection{Déterminer le nombre idéal de clusters}
 			\alinea Observer la variation de la SSE ou du coefficient
 				de silhouette en fonction du nombre de clusters permet
 				d'avoir une idée sur le nombre idéal. En pratique,
 				c'est parfois pas très clair...
 			%	
+			\vspace*{-0.5cm}
 			\begin{figure}[H]
 				\centering
-				\includegraphics[scale=0.8]{Images/clusters_number.png}
+				\includegraphics[scale=0.65]{Images/clusters_number.png}
 				\caption{En reprenant l'exemple de la figure
 				\ref{fig:eval:silhouette}} \hl{10 est le nombre idéal car
 				il minimise SSE et maximise silhouette}.
@@ -3154,12 +3273,13 @@
 				\end{tabular}
 				\end{center}~\\
 				%
-				Les deux mesures de corrélation les plus répandues sont:
+				Les trois mesures de corrélation les plus répandues sont:
 				\begin{align*}
 					\text{Rand tatistic} &= \frac{f_{00} + f_{11}}%
 						{f_{00} + f_{01} + f_{10} + f_{11}}\\
 					\text{\hl{Jaccard coefficient}} &= \frac{f_{11}}{f_{01} + 
-						f_{10} + f_{11}}
+						f_{10} + f_{11}}\\
+					\text{\hl{Pearson's}}
 				\end{align*}
 				%
 			%

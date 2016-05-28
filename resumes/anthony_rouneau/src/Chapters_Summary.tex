@@ -341,7 +341,7 @@
 					\begin{figure}[H]
 						\centering
 						\includegraphics[scale=0.65]{Images/tree_nominal.png}
-						\caption{Division d'attributs binaires}
+						\caption{Division d'attributs nominaux}
 						\label{fig:tree:nominal}
 					\end{figure}\noindent
 				\end{minipage}\hfill
@@ -389,7 +389,7 @@
 			%
 			\paragraph{\point Impureté d'un noeud}~\\~\\
 			%
-			\alinea Plus une classe majoritairement représentée par les 
+			\alinea Plus une classe est majoritairement représentée par les 
 				objets du noeud, au plus ce noeud, cette partition, sera
 				considérée comme \textit{pure}. En pratique, c'est le degré
 				d'impureté qui sera mesuré. un noeud $(0, 1)$ n'a aucune 
@@ -401,7 +401,7 @@
 				pour le calcul de l'\textit{Entropy}) :
 			\begin{align*}
 				\text{Entropy}(t) &= -\sum^{c-1}_{i=0} p(i|t) 
-					\cdot log_2 \cdot (p(i|t))\\
+					\cdot log_2 (p(i|t))\\
 				\text{Gini}(t)    &= 1- \sum^{c-1}_{i=0}[p(i|t)]^2\\
 				\text{Classification error}(t) &= 1-\max_{i}[p(i|t)]
 			\end{align*}
@@ -485,7 +485,7 @@
 			%
 			\alinea \hl{On pourrait encore améliorer ceci en ne calculant 
 				l'impureté que des positions de split se trouvant à la
-				frontière de deux classe}. On ne garderait alors que 
+				frontière de deux classes}. On ne garderait alors que 
 				les position marqués par des $\ast$, ce qui réduit 
 				considérablement les calculs.
 			%			
@@ -523,10 +523,10 @@
 					\textbf{Gain ratio}.
 			\end{enumerate}
 			$$ \text{Gain ratio} = \frac{\Delta_{\text{info}}}%
-				{\text{Entropy}(split)}$$
-			Ou Entropy$(split)$ est l'impureté du split, calculé avec
-				l'\textit{Entropy}. \hl{L'idée est que si le split a 
-				beaucoup de branches, alors Entropy$(split)$ sera grand,
+				{\text{Info}(split)}$$
+			Ou Info$(split) = -\sum_{i=1}^{k} \frac{N(v_i)}{N} \cdot log_2
+				(\frac{N(v_i)}{N})$. \hl{L'idée est que si le split a 
+				beaucoup de branches, alors Info$(split)$ sera grand,
 				réduisant ainsi son \textit{Gain ratio}.}
 			%
 		%

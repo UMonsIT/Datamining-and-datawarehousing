@@ -1193,7 +1193,7 @@
 		\alinea Il existe plusieurs type d'algorithmes construisant des 
 			modèles de classification. En voici quelques-uns.
 		%
-		\subsection{Nearest Neighbours (IBk, Lazy)}
+		\subsection{Nearest Neighbours (kNN, Lazy)}
 			\alinea Cette technique s'appuie sur la notion de distance
 				entre les instances. Plusieurs distances peuvent être
 				considérées (Euclidienne, Manhattan, ...). Voici quelques
@@ -1402,7 +1402,7 @@
 			appelé \textit{$k$-itemset}. L'\textit{itemset} vide est accepté.
 		%
 		\subparagraph{\textit{Support Count}} Soir la largeur de la 
-			transaction (\textit{transaction width}) étant le nombre
+			transaction (\textit{transaction width} $= |t_i|$) étant le nombre
 			d'objets présent dans la transaction. Le \textit{support count}
 			($\sigma(X)$) est défini comme suit : 
 			$$ \sigma(X) = |\left\lbrace t_i | X \subseteq t_i,\ \ t_i \in T
@@ -1533,14 +1533,14 @@
 					des parties de I. Une mesure $f$ est monotone
 					(ou bornée supérieurement) si:
 					$$ \forall X, Y \in J : (X \subseteq Y) 
-							\longrightarrow f(X) \leq f(Y) $$}		
+							\Longrightarrow f(X) \leq f(Y) $$}		
 			\end{tabular}~\\~\\
-			Par analogie, une propriété $f$ est non-monotone si:
+			Par analogie, une propriété $f$ est anti-monotone si:
 				$$ \forall X, Y \in J : (X \subseteq Y) 
-							\longrightarrow f(X) \geq f(Y) $$
+							\Longrightarrow f(X) \geq f(Y) $$
 			%
 			Le principe \textit{Apriori} peut être appliqué à n'importe 
-			quelle mesure non-monotone incorporée à l'algorithme.
+			quelle mesure anti-monotone incorporée à l'algorithme.
 		%
 		\subsection{Génération d'itemsets fréquents avec \textit{Apriori}}
 			\alinea La figure \ref{fig:apriori:gen} illustre la génération
